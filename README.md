@@ -1,5 +1,11 @@
 # Security PoC
 
+[![Linters](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/linters.yml/badge.svg)](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/linters.yml)
+[![tests](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/poc-storage.yml/badge.svg)](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/poc-storage.yml)
+[![License](https://img.shields.io/github/license/opiproject/opi-strongswan-bridge?style=flat-square&color=blue&label=License)](https://github.com/opiproject/opi-strongswan-bridge/blob/master/LICENSE)
+[![codecov](https://codecov.io/gh/opiproject/opi-strongswan-bridge/branch/main/graph/badge.svg)](https://codecov.io/gh/opiproject/opi-strongswan-bridge)
+[![Last Release](https://img.shields.io/github/v/release/opiproject/opi-strongswan-bridge?label=Latest&style=flat-square&logo=go)](https://github.com/opiproject/opi-strongswan-bridge/releases)
+
 This directory contains the security PoC for OPI. This includes reference code
 for the [IPsec](https://github.com/opiproject/opi-api/blob/main/security/proto/ipsec.proto)
 APIs. The specification for these APIs can be found
