@@ -7,7 +7,7 @@
 [![Last Release](https://img.shields.io/github/v/release/opiproject/opi-strongswan-bridge?label=Latest&style=flat-square&logo=go)](https://github.com/opiproject/opi-strongswan-bridge/releases)
 
 This directory contains the security PoC for OPI. This includes reference code
-for the [IPsec](https://github.com/opiproject/opi-api/blob/main/security/proto/ipsec.proto)
+for the [IPsec](https://github.com/opiproject/opi-api/blob/main/security/v1/ipsec.proto)
 APIs. The specification for these APIs can be found
 [here](https://github.com/opiproject/opi-api/blob/main/security/v1/autogen.md).
 
