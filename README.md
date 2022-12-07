@@ -73,7 +73,7 @@ From <https://github.com/grpc/grpc-go/blob/master/Documentation/server-reflectio
 Alias
 
 ```bash
-alias grpc_cli='docker run --network=security_internet --rm -it namely/grpc-cli'
+alias grpc_cli='docker run --network=opi-strongswan-bridge_internet --rm -it namely/grpc-cli'
 ```
 
 See services

@@ -86,7 +86,7 @@ jobs:
         docker-compose up -d
         docker-compose ps
         docker-compose up -d opi-security-client
-        grpc_cli=(docker run --network=security_internet --rm namely/grpc-cli)
+        grpc_cli=(docker run --network=opi-strongswan-bridge_internet --rm namely/grpc-cli)
         "${grpc_cli[@]}" ls opi-security-server:50151
         "${grpc_cli[@]}" ls opi-security-server:50151 opi_api.security.v1.IPsec -l
         "${grpc_cli[@]}" ls opi-security-server:50151 opi_api.security.v1.IPsec.IPsecVersion -l
