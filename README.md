@@ -1,4 +1,4 @@
-# Security PoC
+# OPI to strongSwan bridge using vici API
 
 [![Linters](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/linters.yml/badge.svg)](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/linters.yml)
 [![tests](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/poc-security.yml/badge.svg)](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/poc-security.yml)
