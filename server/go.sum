@@ -79,6 +79,8 @@ github.com/opiproject/opi-api v0.0.0-20221208224812-65d927304471 h1:W1F/RDX/PHjR
 github.com/opiproject/opi-api v0.0.0-20221208224812-65d927304471/go.mod h1:92pv4ulvvPMuxCJ9ND3aYbmBfEMLx0VCjpkiR7ZTqPY=
 github.com/opiproject/opi-api v0.0.0-20221212161256-b1b2672e72be h1:lS16v9/5Vr0+ibwLRp0LJPEq3KWAEFcS81ifVS2BscI=
 github.com/opiproject/opi-api v0.0.0-20221212161256-b1b2672e72be/go.mod h1:92pv4ulvvPMuxCJ9ND3aYbmBfEMLx0VCjpkiR7ZTqPY=
+github.com/opiproject/opi-api v0.0.0-20221212223617-4ab228a467f7 h1:iQS6+aIBIsWmNfcUmP40rrDrKsP+xgF2Z5nhOP33U/c=
+github.com/opiproject/opi-api v0.0.0-20221212223617-4ab228a467f7/go.mod h1:92pv4ulvvPMuxCJ9ND3aYbmBfEMLx0VCjpkiR7ZTqPY=
 github.com/strongswan/govici v0.6.0 h1:QAjc7IIx1c/1P0Hz7yMX91FB5BUNKtyXzfxpuPyBKXE=
 github.com/strongswan/govici v0.6.0/go.mod h1:RgO/KrMlFNsRf3dSoxwWSDSV+ASd98n1T+2G3QMEVHE=
 golang.org/x/net v0.0.0-20220805013720-a33c5aa5df48 h1:N9Vc/rorQUDes6B9CNdIxAn5jODGj2wzfrei2x4wNj4=
