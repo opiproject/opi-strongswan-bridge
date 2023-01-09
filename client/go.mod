@@ -1,4 +1,4 @@
-module main
+module github.com/opiproject/opi-strongswan-bridge/client
 
 go 1.19
 
