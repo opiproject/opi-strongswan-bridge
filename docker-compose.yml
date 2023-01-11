@@ -51,13 +51,16 @@ services:
       - internet
       - intranet
     command: /opi-vici-bridge -port=50151
+    healthcheck:
+      test: grpcurl -plaintext localhost:50151 list || exit 1
 
   opi-security-client:
     build:
       context: client
     network_mode: service:vpn-server
     depends_on:
-      - opi-security-server
+      opi-security-server:
+        condition: service_healthy
     command: /opi-security-client -addr=opi-security-server:50151 -pingaddr=10.3.0.1
 
 networks:
