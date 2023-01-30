@@ -4,6 +4,8 @@
 [![tests](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/poc-security.yml/badge.svg)](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/poc-security.yml)
 [![License](https://img.shields.io/github/license/opiproject/opi-strongswan-bridge?style=flat-square&color=blue&label=License)](https://github.com/opiproject/opi-strongswan-bridge/blob/master/LICENSE)
 [![codecov](https://codecov.io/gh/opiproject/opi-strongswan-bridge/branch/main/graph/badge.svg)](https://codecov.io/gh/opiproject/opi-strongswan-bridge)
+[![Go Report Card](https://goreportcard.com/badge/github.com/opiproject/opi-nvidia-bridge)](https://goreportcard.com/report/github.com/opiproject/opi-strongswan-bridge)
+[![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/opiproject/opi-strongswan-bridge)
 [![Last Release](https://img.shields.io/github/v/release/opiproject/opi-strongswan-bridge?label=Latest&style=flat-square&logo=go)](https://github.com/opiproject/opi-strongswan-bridge/releases)
 
 This directory contains the security PoC for OPI. This includes reference code
