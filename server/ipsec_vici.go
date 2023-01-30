@@ -529,9 +529,12 @@ func loadConn(connreq *pb.IPsecLoadConnReq) error {
 		log.Printf("DUMPING conn.Remove: %v", conn.Remote)
 	}
 
-	for i := 0; i < len(c.Vips.Vip); i++ {
-		conn.Vips = append(conn.Vips, c.Vips.Vip[i])
+	if c.Vips != nil {
+		for i := 0; i < len(c.Vips.Vip); i++ {
+			conn.Vips = append(conn.Vips, c.Vips.Vip[i])
+		}
 	}
+
 	for i := 0; i < len(c.LocalAddrs); i++ {
 		conn.LocalAddrs = append(conn.LocalAddrs, c.LocalAddrs[i].GetAddr())
 	}
