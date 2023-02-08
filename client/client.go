@@ -10,12 +10,14 @@ import (
 	"math/rand"
 	"time"
 
+	dpu "github.com/opiproject/godpu/pkg/ipsec"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
 var (
-	addr = flag.String("addr", "localhost:50151", "the address to connect to")
+	addr     = flag.String("addr", "localhost:50151", "the address to connect to")
 	pingaddr = flag.String("pingaddr", "localhost", "the address to ping for testing purposes")
 )
 
@@ -33,5 +35,5 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	do_ipsec(conn, ctx)
+	dpu.TestIpsec(ctx, conn)
 }
