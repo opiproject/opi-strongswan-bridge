@@ -9,6 +9,8 @@ import (
 	"log"
 	"net"
 
+	server "github.com/opiproject/opi-strongswan-bridge/pkg/ipsec"
+
 	pb "github.com/opiproject/opi-api/security/v1/gen/go"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -18,10 +20,6 @@ var (
 	port = flag.Int("port", 50151, "The server port")
 )
 
-type server struct {
-	pb.UnimplementedIPsecServer
-}
-
 func main() {
 	flag.Parse()
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
@@ -30,7 +28,7 @@ func main() {
 	}
 	s := grpc.NewServer()
 
-	pb.RegisterIPsecServer(s, &server{})
+	pb.RegisterIPsecServer(s, &server.Server{})
 
 	reflection.Register(s)
 
