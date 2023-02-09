@@ -55,13 +55,13 @@ services:
       test: grpcurl -plaintext localhost:50151 list || exit 1
 
   opi-security-client:
-    build:
-      context: client
+    image: ghcr.io/opiproject/godpu:main@sha256:10e3c8f44e97e42052f422d8cde49019d6d417509f312a35ad54183ec2a90fc5
     network_mode: service:vpn-server
     depends_on:
       opi-security-server:
         condition: service_healthy
-    command: /opi-security-client -addr=opi-security-server:50151 -pingaddr=10.3.0.1
+    command: ipsec test --addr=opi-security-server:50151 --pingaddr=10.3.0.1
+
 
 networks:
   internet:
