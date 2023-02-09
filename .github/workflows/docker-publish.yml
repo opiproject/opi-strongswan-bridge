@@ -85,9 +85,15 @@ jobs:
     - name: Run Tests
       run: |
         set -x
-        docker-compose up -d
+        docker-compose up --build --force-recreate --detach
         docker-compose ps
-        docker-compose up -d opi-security-client
+        name=$(docker-compose ps | grep opi-security-client | awk '{print $1}')
+        rc=$(docker wait "${name}")
+        if [ "${rc}" != "0" ]; then
+            echo "opi-security-client failed:"
+            docker logs "${name}"
+            exit 1
+        fi
         grpc_cli=(docker run --network=opi-strongswan-bridge_internet --rm namely/grpc-cli)
         "${grpc_cli[@]}" ls opi-security-server:50151
         "${grpc_cli[@]}" ls opi-security-server:50151 opi_api.security.v1.IPsec -l
