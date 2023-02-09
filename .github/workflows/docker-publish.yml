@@ -1,5 +1,5 @@
 ---
-name: 'OPI Security PoC CI'
+name: Docker
 
 on:
   workflow_dispatch:
@@ -41,7 +41,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@766400ca14a75010e7b2e3119aa0d5b46826e8c7
       with:
-        images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/opi-security-${{ matrix.package }}
+        images: ${{ env.REGISTRY }}/${{ github.repository }}
 
     - name: Build and push Docker image
       id: build-and-push
