@@ -42,7 +42,7 @@ services:
 
   opi-security-server:
     build:
-      context: server
+      context: .
     depends_on:
       - vpn-client
     volumes_from:

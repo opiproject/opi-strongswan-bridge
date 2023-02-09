@@ -50,4 +50,4 @@ jobs:
       - uses: actions/setup-go@v3
       - uses: golangci/golangci-lint-action@v3
         with:
-          working-directory: server
+          working-directory: .

@@ -11,8 +11,9 @@ COPY go.sum ./
 RUN go mod download
 
 # build an app
-COPY *.go ./
-RUN go build -o /opi-vici-bridge
+COPY cmd/ cmd/
+COPY pkg/ pkg/
+RUN go build -v -o /opi-vici-bridge /app/cmd/...
 
 # second stage to reduce image size
 FROM alpine:3.17

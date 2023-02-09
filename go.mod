@@ -1,4 +1,4 @@
-module github.com/opiproject/opi-strongswan-bridge/server
+module github.com/opiproject/opi-strongswan-bridge
 
 go 1.19
 
