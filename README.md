@@ -1,7 +1,7 @@
 # OPI to strongSwan bridge using vici API
 
 [![Linters](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/linters.yml/badge.svg)](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/linters.yml)
-[![tests](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/poc-security.yml/badge.svg)](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/poc-security.yml)
+[![tests](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/docker-publish.yml)
 [![License](https://img.shields.io/github/license/opiproject/opi-strongswan-bridge?style=flat-square&color=blue&label=License)](https://github.com/opiproject/opi-strongswan-bridge/blob/master/LICENSE)
 [![codecov](https://codecov.io/gh/opiproject/opi-strongswan-bridge/branch/main/graph/badge.svg)](https://codecov.io/gh/opiproject/opi-strongswan-bridge)
 [![Go Report Card](https://goreportcard.com/badge/github.com/opiproject/opi-strongswan-bridge/server)](https://goreportcard.com/report/github.com/opiproject/opi-strongswan-bridge/server)
