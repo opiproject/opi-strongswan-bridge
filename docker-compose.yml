@@ -60,7 +60,7 @@ services:
     depends_on:
       opi-security-server:
         condition: service_healthy
-    command: ipsec test --addr=opi-security-server:50151 --pingaddr=10.3.0.1
+    command: test --addr=opi-security-server:50151 --pingaddr=10.3.0.1
 
 
 networks:
