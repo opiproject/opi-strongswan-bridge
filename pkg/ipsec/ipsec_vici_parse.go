@@ -76,6 +76,7 @@ func parseChildListSas(childsa listChildSaParams, name string) (*pb.ListChildSa,
 	return child, nil
 }
 
+//nolint:funlen,gocognit,gocyclo
 func parseIkeListSas(ikesa *listIkeSaParams, km string) (*pb.ListIkeSa, error) {
 	if km == "" {
 		return nil, errors.New("name can't be empty")
@@ -259,6 +260,7 @@ func parseAuth(conn listAuthParams, name string) (*pb.ListConnAuth, error) {
 	return auth, nil
 }
 
+//nolint:gocognit,gocyclo
 func parseConnectionChild(params listChildParams, name string) (*pb.ListChild, error) {
 	log.Printf("Found key %v", params)
 	if name == "" {
