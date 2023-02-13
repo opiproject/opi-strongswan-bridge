@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) 2022 Intel Corporation, or its subsidiaries.
 
+// Package ipsec is the main package of the application
 package ipsec
 
 import (
+	"errors"
 	"log"
 	"strconv"
 	"strings"
@@ -12,20 +14,20 @@ import (
 	"github.com/strongswan/govici/vici"
 )
 
-type localOpts struct {
+type localOptsParams struct {
 	Auth    string   `vici:"auth"`
 	Certs   []string `vici:"certs"`
-	Id      string   `vici:"id"`
-	EapId   string   `vici:"eap_id"`
-	AaaId   string   `vici:"aaa_id"`
-	XauthId string   `vici:"xauth_id"`
+	ID      string   `vici:"id"`
+	EapID   string   `vici:"eap_id"`
+	AaaID   string   `vici:"aaa_id"`
+	XauthID string   `vici:"xauth_id"`
 	PubKeys []string `vici:"pubkeys"`
 }
 
-type remoteOpts struct {
+type remoteOptsParams struct {
 	Auth       string   `vici:"auth"`
-	Id         string   `vici:"id"`
-	EapId      string   `vici:"eap_id"`
+	ID         string   `vici:"id"`
+	EapID      string   `vici:"eap_id"`
 	Groups     []string `vici:"groups"`
 	CertPolicy []string `vici:"cert_policy"`
 	Certs      []string `vici:"certs"`
@@ -33,7 +35,7 @@ type remoteOpts struct {
 	PubKeys    []string `vici:"pubkeys"`
 }
 
-type childSA struct {
+type childSAParams struct {
 	RemoteTrafficSelectors []string `vici:"remote_ts"`
 	LocalTrafficSelectors  []string `vici:"local_ts"`
 	Updown                 string   `vici:"updown"`
@@ -51,35 +53,35 @@ type childSA struct {
 	HwOffload              string   `vici:"hw_offload"`
 }
 
-type connection struct {
+type connectionParams struct {
 	Name string // This field will NOT be marshaled!
 
-	LocalAddrs  []string           `vici:"local_addrs"`
-	RemoteAddrs []string           `vici:"remote_addrs"`
-	Local       localOpts          `vici:"local"`
-	Remote      remoteOpts         `vici:"remote"`
-	Children    map[string]childSA `vici:"children"`
-	Version     int                `vici:"version"`
-	Proposals   []string           `vici:"proposals"`
-	Vips        []string           `vici:"vips"`
-	LocalPort   uint32             `vici:"local_port"`
-	RemotePort  uint32             `vici:"remote_port"`
-	Dscp        uint64             `vici:"dscp"`
-	Encap       string             `vici:"encap"`
-	Mobike      string             `vici:"mobike"`
-	DpdDelay    uint32             `vici:"dpd_delay"`
-	DpdTimeout  uint32             `vici:"dpd_timeout"`
-	ReauthTime  uint32             `vici:"reauth_time"`
-	RekeyTime   string             `vici:"rekey_time"`
-	Pools       []string           `vici:"pools"`
+	LocalAddrs  []string                 `vici:"local_addrs"`
+	RemoteAddrs []string                 `vici:"remote_addrs"`
+	Local       localOptsParams          `vici:"local"`
+	Remote      remoteOptsParams         `vici:"remote"`
+	Children    map[string]childSAParams `vici:"children"`
+	Version     int                      `vici:"version"`
+	Proposals   []string                 `vici:"proposals"`
+	Vips        []string                 `vici:"vips"`
+	LocalPort   uint32                   `vici:"local_port"`
+	RemotePort  uint32                   `vici:"remote_port"`
+	Dscp        uint64                   `vici:"dscp"`
+	Encap       string                   `vici:"encap"`
+	Mobike      string                   `vici:"mobike"`
+	DpdDelay    uint32                   `vici:"dpd_delay"`
+	DpdTimeout  uint32                   `vici:"dpd_timeout"`
+	ReauthTime  uint32                   `vici:"reauth_time"`
+	RekeyTime   string                   `vici:"rekey_time"`
+	Pools       []string                 `vici:"pools"`
 }
 
-type unload_connection struct {
-	//Cname string // This field will NOT be marshaled!
+type unloadConnectionParams struct {
+	// Cname string // This field will NOT be marshaled!
 	Name string `vici:"name"`
 }
 
-type init_connection struct {
+type initConnectionParams struct {
 	Child      string `vici:"child"`
 	Ike        string `vici:"ike"`
 	Timeout    int    `vici:"timeout"`
@@ -87,43 +89,43 @@ type init_connection struct {
 	LogLevel   string `vici:"loglevel"`
 }
 
-type terminate_connection struct {
+type terminateConnectionParams struct {
 	Child    string `vici:"child"`
 	Ike      string `vici:"ike"`
-	ChildId  uint64 `vici:"child-id"`
-	IkeId    uint64 `vici:"ike-id"`
+	ChildID  uint64 `vici:"child-id"`
+	IkeID    uint64 `vici:"ike-id"`
 	Force    string `vici:"force"`
 	Timeout  int    `vici:"timeout"`
 	LogLevel string `vici:"loglevel"`
 }
 
-type rekey_connection struct {
+type rekeyConnectionParams struct {
 	Child   string `vici:"child"`
 	Ike     string `vici:"ike"`
-	ChildId uint64 `vici:"child-id"`
-	IkeId   uint64 `vici:"ike-id"`
+	ChildID uint64 `vici:"child-id"`
+	IkeID   uint64 `vici:"ike-id"`
 	Reauth  bool   `vici:"reauth"`
 }
 
-type list_sas struct {
+type listSasParams struct {
 	Ike     string `vici:"ike"`
-	IkeId   uint64 `vici:"ike-id"`
+	IkeID   uint64 `vici:"ike-id"`
 	Child   string `vici:"child"`
-	ChildId uint64 `vici:"child-id"`
+	ChildID uint64 `vici:"child-id"`
 	Noblock string `vici:"noblock"`
 }
 
-type list_conns struct {
+type listConnsParams struct {
 	Ike string `vici:"ike"`
 }
 
-type list_certs struct {
+type listCertsParams struct {
 	Type    string `vici:"type"`
 	Flag    string `vici:"flag"`
 	Subject string `vici:"subject"`
 }
 
-type list_child_sa struct {
+type listChildSaParams struct {
 	Protocol     string `vici:"protocol"`
 	Encap        string `vici:"encap"`
 	SpiIn        string `vici:"spi-in"`
@@ -134,8 +136,8 @@ type list_child_sa struct {
 	MarkMaskIn   string `vici:"mark-mask-in"`
 	MarkOut      string `vici:"mark-out"`
 	MarkMaskOut  string `vici:"mark-mask-out"`
-	IfIdIn       string `vici:"if-id-in"`
-	IfIdOut      string `vici:"if-id-out"`
+	IfIDIn       string `vici:"if-id-in"`
+	IfIDOut      string `vici:"if-id-out"`
 	EncrAlg      string `vici:"encr-alg"`
 	EncKeysize   string `vici:"encr-keysize"`
 	IntegAlg     string `vici:"integ-alg"`
@@ -144,64 +146,64 @@ type list_child_sa struct {
 	Esn          string `vici:"esn"`
 }
 
-type list_ike_sa struct {
-	UniqueId      string                   `vici:"uniqueid"`
-	Version       string                   `vici:"version"`
-	State         string                   `vici:"state"`
-	LocalHost     string                   `vici:"local-host"`
-	LocalPort     string                   `vici:"local-port"`
-	LocalId       string                   `vici:"local-id"`
-	RemoteHost    string                   `vici:"remote-host"`
-	RemotePort    string                   `vici:"remote-port"`
-	RemoteId      string                   `vici:"remote-id"`
-	RemoteXauthId string                   `vici:"remote-xauth-id"`
-	RemoteEapId   string                   `vici:"remote-eap-id"`
-	Initiator     string                   `vici:"initiator"`
-	InitiatorSpi  string                   `vici:"initiator-spi"`
-	ResponderSpi  string                   `vici:"responder-spi"`
-	NatLocal      string                   `vici:"nat-local"`
-	NatRemote     string                   `vici:"nat-remote"`
-	NatFake       string                   `vici:"nat-fake"`
-	NatAny        string                   `vici:"nat-any"`
-	IfIdIn        string                   `vici:"if-id-in"`
-	IfIdOut       string                   `vici:"if-id-out"`
-	EncrAlg       string                   `vici:"encr-alg"`
-	EncrKeysize   string                   `vici:"encr-keysize"`
-	IntegAlg      string                   `vici:"integ-alg"`
-	IntegKeysize  string                   `vici:"integ-keysize"`
-	PrfAlg        string                   `vici:"prf-alg"`
-	DhGroup       string                   `vici:"dh-group"`
-	Ppk           string                   `vici:"ppk"`
-	Established   string                   `vici:"established"`
-	RekeyTime     string                   `vici:"rekey-time"`
-	ReauthTime    string                   `vici:"reauth-time"`
-	LocalVips     []string                 `vici:"local-vips"`
-	RemoteVips    []string                 `vici:"remote-vips"`
-	TasksQueued   []string                 `vici:"tasks-queued"`
-	TasksActive   []string                 `vici:"tasks-active"`
-	TasksPassive  []string                 `vici:"tasks-passive"`
-	ChildSas      map[string]list_child_sa `vici:"child-sas"`
+type listIkeSaParams struct {
+	UniqueID      string                       `vici:"uniqueid"`
+	Version       string                       `vici:"version"`
+	State         string                       `vici:"state"`
+	LocalHost     string                       `vici:"local-host"`
+	LocalPort     string                       `vici:"local-port"`
+	LocalID       string                       `vici:"local-id"`
+	RemoteHost    string                       `vici:"remote-host"`
+	RemotePort    string                       `vici:"remote-port"`
+	RemoteID      string                       `vici:"remote-id"`
+	RemoteXauthID string                       `vici:"remote-xauth-id"`
+	RemoteEapID   string                       `vici:"remote-eap-id"`
+	Initiator     string                       `vici:"initiator"`
+	InitiatorSpi  string                       `vici:"initiator-spi"`
+	ResponderSpi  string                       `vici:"responder-spi"`
+	NatLocal      string                       `vici:"nat-local"`
+	NatRemote     string                       `vici:"nat-remote"`
+	NatFake       string                       `vici:"nat-fake"`
+	NatAny        string                       `vici:"nat-any"`
+	IfIDIn        string                       `vici:"if-id-in"`
+	IfIDOut       string                       `vici:"if-id-out"`
+	EncrAlg       string                       `vici:"encr-alg"`
+	EncrKeysize   string                       `vici:"encr-keysize"`
+	IntegAlg      string                       `vici:"integ-alg"`
+	IntegKeysize  string                       `vici:"integ-keysize"`
+	PrfAlg        string                       `vici:"prf-alg"`
+	DhGroup       string                       `vici:"dh-group"`
+	Ppk           string                       `vici:"ppk"`
+	Established   string                       `vici:"established"`
+	RekeyTime     string                       `vici:"rekey-time"`
+	ReauthTime    string                       `vici:"reauth-time"`
+	LocalVips     []string                     `vici:"local-vips"`
+	RemoteVips    []string                     `vici:"remote-vips"`
+	TasksQueued   []string                     `vici:"tasks-queued"`
+	TasksActive   []string                     `vici:"tasks-active"`
+	TasksPassive  []string                     `vici:"tasks-passive"`
+	ChildSas      map[string]listChildSaParams `vici:"child-sas"`
 }
 
-type list_auth struct {
+type listAuthParams struct {
 	Name       string   // This field will NOT be marshaled!
 	Class      string   `vici:"class"`
 	EapType    string   `vici:"eap-type"`
 	EapVendor  string   `vici:"eap-vendor"`
 	Xauth      string   `vici:"xauth"`
 	Revocation string   `vici:"revocation"`
-	Id         string   `vici:"id"`
-	CaId       string   `vici:"ca_id"`
-	AaaId      string   `vici:"aaa_id"`
-	EapId      string   `vici:"eap_id"`
-	XauthId    string   `vici:"xauth_id"`
+	ID         string   `vici:"id"`
+	CaID       string   `vici:"ca_id"`
+	AaaID      string   `vici:"aaa_id"`
+	EapID      string   `vici:"eap_id"`
+	XauthID    string   `vici:"xauth_id"`
 	Groups     []string `vici:"groups"`
 	CertPolicy []string `vici:"cert_policy"`
 	Certs      []string `vici:"certs"`
 	CaCerts    []string `vici:"cacerts"`
 }
 
-type list_child struct {
+type listChildParams struct {
 	Name         string   // This field will NOT be marshaled!
 	Mode         string   `vici:"mode"`
 	Label        string   `vici:"label"`
@@ -210,29 +212,29 @@ type list_child struct {
 	RekeyPackets uint32   `vici:"rekey_packets"`
 	DpdAction    string   `vici:"dpd_action"`
 	CloseAction  string   `vici:"close_action"`
-	RemoteTs     []string `vici:"remote-ts"` // Used by list-conns so we can overload this struct
-	LocalTs      []string `vici:"local-ts"`  // Used by list-conns so we can overload this struct
+	RemoteTS     []string `vici:"remote-ts"` // Used by list-conns so we can overload this struct
+	LocalTS      []string `vici:"local-ts"`  // Used by list-conns so we can overload this struct
 	Interface    string   `vici:"interface"`
 	Priority     string   `vici:"priority"`
 }
 
-type list_ike struct {
-	LocalAddrs  []string              `vici:"local_addrs"`
-	RemoteAddrs []string              `vici:"remote_addrs"`
-	Version     string                `vici:"version"`
-	ReauthTime  uint32                `vici:"reauth_time"`
-	RekeyTime   uint32                `vici:"rekey_time"`
-	Unique      string                `vici:"unique"`
-	DpdDelay    uint32                `vici:"dpd_delay"`
-	DpdTimeout  uint32                `vici:"dpd_timeout"`
-	Ppk         string                `vici:"ppk"`
-	PpkRequired string                `vici:"ppk_required"`
-	Local       map[string]list_auth  `vici:"local"`
-	Remote      map[string]list_auth  `vici:"remote"`
-	Children    map[string]list_child `vici:"children"`
+type listIkeParams struct {
+	LocalAddrs  []string                   `vici:"local_addrs"`
+	RemoteAddrs []string                   `vici:"remote_addrs"`
+	Version     string                     `vici:"version"`
+	ReauthTime  uint32                     `vici:"reauth_time"`
+	RekeyTime   uint32                     `vici:"rekey_time"`
+	Unique      string                     `vici:"unique"`
+	DpdDelay    uint32                     `vici:"dpd_delay"`
+	DpdTimeout  uint32                     `vici:"dpd_timeout"`
+	Ppk         string                     `vici:"ppk"`
+	PpkRequired string                     `vici:"ppk_required"`
+	Local       map[string]listAuthParams  `vici:"local"`
+	Remote      map[string]listAuthParams  `vici:"remote"`
+	Children    map[string]listChildParams `vici:"children"`
 }
 
-type list_cert struct {
+type listCertParams struct {
 	Type       string `vici:"type"`
 	Flag       string `vici:"flag"`
 	HasPrivKey string `vici:"has_privkey"`
@@ -247,8 +249,12 @@ func buildProposal(prop *pb.Proposals) (string, error) {
 	var integ strings.Builder
 	var prf strings.Builder
 	var dh strings.Builder
-	var compiled_proposal strings.Builder
+	var result strings.Builder
 	var tstr string
+
+	if prop == nil {
+		return "", errors.New("proposal can't be nil")
+	}
 
 	for k := 0; k < len(prop.CryptoAlg); k++ {
 		crypto.WriteString(strings.ToLower(prop.CryptoAlg[k].String()))
@@ -280,31 +286,31 @@ func buildProposal(prop *pb.Proposals) (string, error) {
 	}
 
 	if crypto.String() != "" {
-		compiled_proposal.WriteString(crypto.String())
+		result.WriteString(crypto.String())
 		if integ.String() != "" || prf.String() != "" || dh.String() != "" {
 			tstr = "-"
-			compiled_proposal.WriteString(tstr)
+			result.WriteString(tstr)
 		}
 	}
 	if integ.String() != "" {
-		compiled_proposal.WriteString(integ.String())
+		result.WriteString(integ.String())
 		if prf.String() != "" || dh.String() != "" {
 			tstr = "-"
-			compiled_proposal.WriteString(tstr)
+			result.WriteString(tstr)
 		}
 	}
 	if prf.String() != "" {
-		compiled_proposal.WriteString(prf.String())
+		result.WriteString(prf.String())
 		if dh.String() != "" {
 			tstr = "-"
-			compiled_proposal.WriteString(tstr)
+			result.WriteString(tstr)
 		}
 	}
 	if dh.String() != "" {
-		compiled_proposal.WriteString(dh.String())
+		result.WriteString(dh.String())
 	}
 
-	return compiled_proposal.String(), nil
+	return result.String(), nil
 }
 
 func ipsecVersion() (*pb.IPsecVersionResp, error) {
@@ -313,7 +319,12 @@ func ipsecVersion() (*pb.IPsecVersionResp, error) {
 		log.Printf("Failed creating vici session")
 		return nil, err
 	}
-	defer s.Close()
+	defer func(conn *vici.Session) {
+		err := conn.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(s)
 
 	m, err := s.CommandRequest("version", nil)
 	if err != nil {
@@ -345,7 +356,12 @@ func ipsecStats() (*pb.IPsecStatsResp, error) {
 		log.Printf("Failed creating vici session")
 		return nil, err
 	}
-	defer s.Close()
+	defer func(conn *vici.Session) {
+		err := conn.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(s)
 
 	m, err := s.CommandRequest("stats", nil)
 	if err != nil {
@@ -353,7 +369,7 @@ func ipsecStats() (*pb.IPsecStatsResp, error) {
 		return nil, err
 	}
 
-	var stat_string strings.Builder
+	var result strings.Builder
 
 	value := m.Get("uptime")
 	field, ok := value.(*vici.Message)
@@ -362,8 +378,8 @@ func ipsecStats() (*pb.IPsecStatsResp, error) {
 	} else {
 		running := field.Get("running").(string)
 		since := field.Get("since").(string)
-		stat_string.WriteString("Running time: " + running + "\n")
-		stat_string.WriteString("Absolute startup time: " + since + "\n")
+		result.WriteString("Running time: " + running + "\n")
+		result.WriteString("Absolute startup time: " + since + "\n")
 	}
 
 	value = m.Get("workers")
@@ -373,8 +389,8 @@ func ipsecStats() (*pb.IPsecStatsResp, error) {
 	} else {
 		total := field.Get("total").(string)
 		idle := field.Get("idle").(string)
-		stat_string.WriteString("Total # of worker threads: " + total + "\n")
-		stat_string.WriteString("Worker threads currently idle: " + idle + "\n")
+		result.WriteString("Total # of worker threads: " + total + "\n")
+		result.WriteString("Worker threads currently idle: " + idle + "\n")
 
 		value = field.Get("active")
 		subfield, subok := value.(*vici.Message)
@@ -385,10 +401,10 @@ func ipsecStats() (*pb.IPsecStatsResp, error) {
 			high := subfield.Get("high").(string)
 			medium := subfield.Get("medium").(string)
 			low := subfield.Get("low").(string)
-			stat_string.WriteString("Threads processing critical priority jobs: " + critical + "\n")
-			stat_string.WriteString("Threads processing high priority jobs: " + high + "\n")
-			stat_string.WriteString("Threads processing medium priority jobs: " + medium + "\n")
-			stat_string.WriteString("Threads processing low priority jobs: " + low + "\n")
+			result.WriteString("Threads processing critical priority jobs: " + critical + "\n")
+			result.WriteString("Threads processing high priority jobs: " + high + "\n")
+			result.WriteString("Threads processing medium priority jobs: " + medium + "\n")
+			result.WriteString("Threads processing low priority jobs: " + low + "\n")
 		}
 	}
 
@@ -401,14 +417,14 @@ func ipsecStats() (*pb.IPsecStatsResp, error) {
 		high := field.Get("high").(string)
 		medium := field.Get("medium").(string)
 		low := field.Get("low").(string)
-		stat_string.WriteString("Jobs queued with critical priority: " + critical + "\n")
-		stat_string.WriteString("Jobs queued with high priority: " + high + "\n")
-		stat_string.WriteString("Jobs queued with medium priority: " + medium + "\n")
-		stat_string.WriteString("Jobs queued with low priority: " + low + "\n")
+		result.WriteString("Jobs queued with critical priority: " + critical + "\n")
+		result.WriteString("Jobs queued with high priority: " + high + "\n")
+		result.WriteString("Jobs queued with medium priority: " + medium + "\n")
+		result.WriteString("Jobs queued with low priority: " + low + "\n")
 	}
 
 	scheduled := m.Get("scheduled").(string)
-	stat_string.WriteString("# of jobs scheduled for timed execution: " + scheduled + "\n")
+	result.WriteString("# of jobs scheduled for timed execution: " + scheduled + "\n")
 
 	value = m.Get("ikesas")
 	field, ok = value.(*vici.Message)
@@ -416,17 +432,17 @@ func ipsecStats() (*pb.IPsecStatsResp, error) {
 		log.Printf("Cannot find ikesas")
 	} else {
 		total := field.Get("total").(string)
-		half_open := field.Get("half-open").(string)
-		stat_string.WriteString("Total number of IKE_SAs active: " + total + "\n")
-		stat_string.WriteString("Number of IKE_SAs in half-open state: " + half_open + "\n")
+		halfOpen := field.Get("half-open").(string)
+		result.WriteString("Total number of IKE_SAs active: " + total + "\n")
+		result.WriteString("Number of IKE_SAs in half-open state: " + halfOpen + "\n")
 	}
 
-	stat_string.WriteString("Plugins: ")
+	result.WriteString("Plugins: ")
 	plugins := m.Get("plugins").([]string)
 	for c := 0; c < len(plugins); c++ {
-		stat_string.WriteString(plugins[c] + " ")
+		result.WriteString(plugins[c] + " ")
 	}
-	stat_string.WriteString("\n")
+	result.WriteString("\n")
 
 	value = m.Get("mem")
 	field, ok = value.(*vici.Message)
@@ -435,8 +451,8 @@ func ipsecStats() (*pb.IPsecStatsResp, error) {
 	} else {
 		total := field.Get("total").(string)
 		allocs := field.Get("allocs").(string)
-		stat_string.WriteString("Total heap memory usage in bytes: " + total + "\n")
-		stat_string.WriteString("Total heap allocation in blocks: " + allocs + "\n")
+		result.WriteString("Total heap memory usage in bytes: " + total + "\n")
+		result.WriteString("Total heap allocation in blocks: " + allocs + "\n")
 
 		// NOTE: Skipping heap-name (Windows only) for now since OPI
 		//       does not run on Windows.
@@ -451,14 +467,14 @@ func ipsecStats() (*pb.IPsecStatsResp, error) {
 		mmap := field.Get("mmap").(string)
 		used := field.Get("used").(string)
 		free := field.Get("free").(string)
-		stat_string.WriteString("Non-mmap'd space available: " + sbrk + "\n")
-		stat_string.WriteString("Mmap'd space available: " + mmap + "\n")
-		stat_string.WriteString("Total number of bytes used: " + used + "\n")
-		stat_string.WriteString("Available but unsued bytes: " + free + "\n")
+		result.WriteString("Non-mmap'd space available: " + sbrk + "\n")
+		result.WriteString("Mmap'd space available: " + mmap + "\n")
+		result.WriteString("Total number of bytes used: " + used + "\n")
+		result.WriteString("Available but unsued bytes: " + free + "\n")
 	}
 
 	statsresp := &pb.IPsecStatsResp{
-		Status: stat_string.String(),
+		Status: result.String(),
 	}
 
 	return statsresp, nil
@@ -466,7 +482,7 @@ func ipsecStats() (*pb.IPsecStatsResp, error) {
 
 func loadConn(connreq *pb.IPsecLoadConnReq) error {
 	// Declare the connection variable, as we have to conditionally load it
-	var conn = &connection{
+	var conn = &connectionParams{
 		LocalPort:  500,
 		RemotePort: 500,
 		RekeyTime:  "4h",
@@ -513,17 +529,17 @@ func loadConn(connreq *pb.IPsecLoadConnReq) error {
 		conn.RekeyTime = s + "s"
 	}
 	if c.GetLocalAuth() != nil {
-		conn.Local = localOpts{
+		conn.Local = localOptsParams{
 			Auth: strings.ToLower(c.GetLocalAuth().GetAuth().String()),
-			Id:   c.GetLocalAuth().GetId(),
+			ID:   c.GetLocalAuth().GetId(),
 		}
 
 		log.Printf("DUMPING conn.Local: %v", conn.Local)
 	}
 	if c.GetRemoteAuth() != nil {
-		conn.Remote = remoteOpts{
+		conn.Remote = remoteOptsParams{
 			Auth: strings.ToLower(c.GetRemoteAuth().GetAuth().String()),
-			Id:   c.GetRemoteAuth().GetId(),
+			ID:   c.GetRemoteAuth().GetId(),
 		}
 
 		log.Printf("DUMPING conn.Remove: %v", conn.Remote)
@@ -548,30 +564,30 @@ func loadConn(connreq *pb.IPsecLoadConnReq) error {
 	}
 
 	if c.Proposals != nil {
-		ike_proposal, _ := buildProposal(c.Proposals)
-		conn.Proposals = []string{ike_proposal}
+		ikeProposal, _ := buildProposal(c.Proposals)
+		conn.Proposals = []string{ikeProposal}
 		log.Printf("IKE proposal: %v", conn.Proposals)
 	}
 
 	for i := 0; i < len(c.Children); i++ {
-		var local_ts []string
-		var remote_ts []string
+		var localTS []string
+		var remoteTS []string
 
 		if c.Children[i].LocalTs != nil {
 			for k := 0; k < len(c.Children[i].LocalTs.Ts); k++ {
-				local_ts = append(local_ts, c.Children[i].LocalTs.Ts[k].GetCidr())
+				localTS = append(localTS, c.Children[i].LocalTs.Ts[k].GetCidr())
 			}
 		}
 		if c.Children[i].RemoteTs != nil {
 			for k := 0; k < len(c.Children[i].RemoteTs.Ts); k++ {
-				remote_ts = append(remote_ts, c.Children[i].RemoteTs.Ts[k].GetCidr())
+				remoteTS = append(remoteTS, c.Children[i].RemoteTs.Ts[k].GetCidr())
 			}
 		}
-		log.Printf("Dumping local_ts [%v] remote_ts [%v]", local_ts, remote_ts)
+		log.Printf("Dumping local_ts [%v] remote_ts [%v]", localTS, remoteTS)
 
-		csa := childSA{
-			LocalTrafficSelectors:  local_ts,
-			RemoteTrafficSelectors: remote_ts,
+		csa := childSAParams{
+			LocalTrafficSelectors:  localTS,
+			RemoteTrafficSelectors: remoteTS,
 			RekeyTime:              "1h",
 			LifeTime:               "66m",
 			Inactivity:             c.Children[i].GetInactivity(),
@@ -587,8 +603,8 @@ func loadConn(connreq *pb.IPsecLoadConnReq) error {
 			csa.ESPProposals = []string{proposal}
 		}
 		if c.Children[i].AgProposals != nil {
-			ag_proposal, _ := buildProposal(c.Children[i].AgProposals)
-			csa.AgProposals = []string{ag_proposal}
+			agProposal, _ := buildProposal(c.Children[i].AgProposals)
+			csa.AgProposals = []string{agProposal}
 		}
 
 		if c.Children[i].RekeyTime != 0 {
@@ -610,7 +626,7 @@ func loadConn(connreq *pb.IPsecLoadConnReq) error {
 			csa.HwOffload = c.Children[i].GetHwOffload()
 		}
 
-		conn.Children = make(map[string]childSA)
+		conn.Children = make(map[string]childSAParams)
 		conn.Children[c.Children[i].GetName()] = csa
 
 		log.Printf("Dumping child object: %v", conn.Children[c.Children[i].GetName()])
@@ -624,7 +640,12 @@ func loadConn(connreq *pb.IPsecLoadConnReq) error {
 		log.Printf("Failed creating vici session")
 		return err
 	}
-	defer s.Close()
+	defer func(conn *vici.Session) {
+		err := conn.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(s)
 
 	mm, err := vici.MarshalMessage(conn)
 	if err != nil {
@@ -649,7 +670,7 @@ func loadConn(connreq *pb.IPsecLoadConnReq) error {
 
 func unloadConn(connreq *pb.IPsecUnloadConnReq) error {
 	// Build the connection object
-	conn := &unload_connection{
+	conn := &unloadConnectionParams{
 		Name: connreq.GetName(),
 	}
 
@@ -660,7 +681,12 @@ func unloadConn(connreq *pb.IPsecUnloadConnReq) error {
 		log.Printf("Failed creating vici session")
 		return err
 	}
-	defer s.Close()
+	defer func(conn *vici.Session) {
+		err := conn.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(s)
 
 	c, err := vici.MarshalMessage(conn)
 	if err != nil {
@@ -678,32 +704,37 @@ func unloadConn(connreq *pb.IPsecUnloadConnReq) error {
 }
 
 func initiateConn(initreq *pb.IPsecInitiateReq) error {
-	init_conn := &init_connection{}
+	params := &initConnectionParams{}
 
 	if initreq.GetChild() != "" {
-		init_conn.Child = initreq.GetChild()
+		params.Child = initreq.GetChild()
 	}
 	if initreq.GetIke() != "" {
-		init_conn.Ike = initreq.GetIke()
+		params.Ike = initreq.GetIke()
 	}
 	if initreq.GetTimeout() != "" {
 		timeout, _ := strconv.Atoi(initreq.GetTimeout())
-		init_conn.Timeout = timeout
+		params.Timeout = timeout
 	}
 	if initreq.GetLoglevel() != "" {
-		init_conn.LogLevel = initreq.GetLoglevel()
+		params.LogLevel = initreq.GetLoglevel()
 	}
 
-	log.Printf("Dumping connection to initiate: %v", init_conn)
+	log.Printf("Dumping connection to initiate: %v", params)
 
 	s, err := vici.NewSession()
 	if err != nil {
 		log.Printf("Failed creating vici session")
 		return err
 	}
-	defer s.Close()
+	defer func(conn *vici.Session) {
+		err := conn.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(s)
 
-	c, err := vici.MarshalMessage(init_conn)
+	c, err := vici.MarshalMessage(params)
 	if err != nil {
 		log.Printf("Failed marshalling message")
 		return err
@@ -719,41 +750,46 @@ func initiateConn(initreq *pb.IPsecInitiateReq) error {
 }
 
 func terminateConn(termreq *pb.IPsecTerminateReq) (uint32, error) {
-	term_conn := &terminate_connection{}
+	params := &terminateConnectionParams{}
 
 	if termreq.GetChild() != "" {
-		term_conn.Child = termreq.GetChild()
+		params.Child = termreq.GetChild()
 	}
 	if termreq.GetIke() != "" {
-		term_conn.Ike = termreq.GetIke()
+		params.Ike = termreq.GetIke()
 	}
 	if termreq.GetChildId() != 0 {
-		term_conn.ChildId = termreq.GetChildId()
+		params.ChildID = termreq.GetChildId()
 	}
 	if termreq.GetIkeId() != 0 {
-		term_conn.IkeId = termreq.GetIkeId()
+		params.IkeID = termreq.GetIkeId()
 	}
 	if termreq.GetTimeout() != "" {
 		timeout, _ := strconv.Atoi(termreq.GetTimeout())
-		term_conn.Timeout = timeout
+		params.Timeout = timeout
 	}
 	if termreq.GetForce() != "" {
-		term_conn.Force = termreq.GetForce()
+		params.Force = termreq.GetForce()
 	}
 	if termreq.GetLoglevel() != "" {
-		term_conn.LogLevel = termreq.GetLoglevel()
+		params.LogLevel = termreq.GetLoglevel()
 	}
 
-	log.Printf("Dumping connection to terminate: %v", term_conn)
+	log.Printf("Dumping connection to terminate: %v", params)
 
 	s, err := vici.NewSession()
 	if err != nil {
 		log.Printf("Failed creating vici session")
 		return 0, err
 	}
-	defer s.Close()
+	defer func(conn *vici.Session) {
+		err := conn.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(s)
 
-	c, err := vici.MarshalMessage(term_conn)
+	c, err := vici.MarshalMessage(params)
 	if err != nil {
 		log.Printf("Failed marshalling message")
 		return 0, err
@@ -769,22 +805,22 @@ func terminateConn(termreq *pb.IPsecTerminateReq) (uint32, error) {
 }
 
 func rekeyConn(rekeyreq *pb.IPsecRekeyReq) (string, uint32, error) {
-	rekey_conn := &rekey_connection{}
+	params := &rekeyConnectionParams{}
 
 	if rekeyreq.GetChild() != "" {
-		rekey_conn.Child = rekeyreq.GetChild()
+		params.Child = rekeyreq.GetChild()
 	}
 	if rekeyreq.GetIke() != "" {
-		rekey_conn.Ike = rekeyreq.GetIke()
+		params.Ike = rekeyreq.GetIke()
 	}
 	if rekeyreq.GetChildId() != 0 {
-		rekey_conn.ChildId = rekeyreq.GetChildId()
+		params.ChildID = rekeyreq.GetChildId()
 	}
 	if rekeyreq.GetIkeId() != 0 {
-		rekey_conn.IkeId = rekeyreq.GetIkeId()
+		params.IkeID = rekeyreq.GetIkeId()
 	}
 	if rekeyreq.GetReauth() == "yes" {
-		rekey_conn.Reauth = true
+		params.Reauth = true
 	}
 
 	s, err := vici.NewSession()
@@ -792,9 +828,14 @@ func rekeyConn(rekeyreq *pb.IPsecRekeyReq) (string, uint32, error) {
 		log.Printf("Failed creating vici session")
 		return "", 0, err
 	}
-	defer s.Close()
+	defer func(conn *vici.Session) {
+		err := conn.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(s)
 
-	c, err := vici.MarshalMessage(rekey_conn)
+	c, err := vici.MarshalMessage(params)
 	if err != nil {
 		log.Printf("Failed marshalling message")
 		return "", 0, err
@@ -820,22 +861,22 @@ func rekeyConn(rekeyreq *pb.IPsecRekeyReq) (string, uint32, error) {
 }
 
 func listSas(listreq *pb.IPsecListSasReq) (*pb.IPsecListSasResp, error) {
-	listsas_req := &list_sas{}
+	params := &listSasParams{}
 
 	if listreq.GetChild() != "" {
-		listsas_req.Child = listreq.GetChild()
+		params.Child = listreq.GetChild()
 	}
 	if listreq.GetIke() != "" {
-		listsas_req.Ike = listreq.GetIke()
+		params.Ike = listreq.GetIke()
 	}
 	if listreq.GetChildId() != 0 {
-		listsas_req.ChildId = listreq.GetChildId()
+		params.ChildID = listreq.GetChildId()
 	}
 	if listreq.GetIkeId() != 0 {
-		listsas_req.IkeId = listreq.GetIkeId()
+		params.IkeID = listreq.GetIkeId()
 	}
 	if listreq.GetNoblock() != "" {
-		listsas_req.Noblock = listreq.GetNoblock()
+		params.Noblock = listreq.GetNoblock()
 	}
 
 	s, err := vici.NewSession()
@@ -843,9 +884,14 @@ func listSas(listreq *pb.IPsecListSasReq) (*pb.IPsecListSasResp, error) {
 		log.Printf("Failed creating vici session")
 		return nil, err
 	}
-	defer s.Close()
+	defer func(conn *vici.Session) {
+		err := conn.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(s)
 
-	c, err := vici.MarshalMessage(listsas_req)
+	c, err := vici.MarshalMessage(params)
 	if err != nil {
 		log.Printf("Failed marshalling message")
 		return nil, err
@@ -853,45 +899,45 @@ func listSas(listreq *pb.IPsecListSasReq) (*pb.IPsecListSasResp, error) {
 
 	log.Printf("Marshaled vici message: %v", c)
 
-	list_messages, err := s.StreamedCommandRequest("list-sas", "list-sa", c)
+	listMessages, err := s.StreamedCommandRequest("list-sas", "list-sa", c)
 	if err != nil {
 		log.Printf("Failed getting sas")
 		return nil, err
 	}
 
-	var sas_reply pb.IPsecListSasResp
+	var sasReply pb.IPsecListSasResp
 
 	// We stream responses, so build responses now
-	m := list_messages.Messages()
+	m := listMessages.Messages()
 	for _, mess := range m {
 		for _, k := range mess.Keys() {
-			list_sas := list_ike_sa{}
+			listSas := listIkeSaParams{}
 			log.Printf("K IS EQUAL TO %v", k)
 			sa := mess.Get(k).(*vici.Message)
-			err := vici.UnmarshalMessage(sa, &list_sas)
+			err := vici.UnmarshalMessage(sa, &listSas)
 			if err != nil {
 				log.Printf("Failed marshalling message: %v", err)
 				return nil, err
 			}
-			log.Printf("Found message: %v", list_sas)
+			log.Printf("Found message: %v", listSas)
 
-			ike, err := parse_ike_list_sas(&list_sas, k)
+			ike, err := parseIkeListSas(&listSas, k)
 			if err != nil {
 				log.Printf("Failed parsing IKE_SA: %v", err)
 				return nil, err
 			}
-			sas_reply.Ikesas = append(sas_reply.Ikesas, ike)
+			sasReply.Ikesas = append(sasReply.Ikesas, ike)
 		}
 	}
 
-	return &sas_reply, nil
+	return &sasReply, nil
 }
 
 func listConns(listreq *pb.IPsecListConnsReq) (*pb.IPsecListConnsResp, error) {
-	listconns_req := &list_conns{}
+	params := &listConnsParams{}
 
 	if listreq.GetIke() != "" {
-		listconns_req.Ike = listreq.GetIke()
+		params.Ike = listreq.GetIke()
 	}
 
 	s, err := vici.NewSession()
@@ -899,9 +945,14 @@ func listConns(listreq *pb.IPsecListConnsReq) (*pb.IPsecListConnsResp, error) {
 		log.Printf("Failed creating vici session")
 		return nil, err
 	}
-	defer s.Close()
+	defer func(conn *vici.Session) {
+		err := conn.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(s)
 
-	c, err := vici.MarshalMessage(listconns_req)
+	c, err := vici.MarshalMessage(params)
 	if err != nil {
 		log.Printf("Failed marshalling message")
 		return nil, err
@@ -909,19 +960,19 @@ func listConns(listreq *pb.IPsecListConnsReq) (*pb.IPsecListConnsResp, error) {
 
 	log.Printf("Marshaled vici message: %v", c)
 
-	list_messages, err := s.StreamedCommandRequest("list-conns", "list-conn", c)
+	listMessages, err := s.StreamedCommandRequest("list-conns", "list-conn", c)
 	if err != nil {
 		log.Printf("Failed getting conns")
 		return nil, err
 	}
 
-	var conns_reply pb.IPsecListConnsResp
+	var connsReply pb.IPsecListConnsResp
 
 	// We stream responses, so build responses now
-	m := list_messages.Messages()
+	m := listMessages.Messages()
 	for _, mess := range m {
 		for _, k := range mess.Keys() {
-			conn := list_ike{}
+			conn := listIkeParams{}
 			log.Printf("K IS EQUAL TO %v", k)
 			sa := mess.Get(k).(*vici.Message)
 			err := vici.UnmarshalMessage(sa, &conn)
@@ -931,29 +982,29 @@ func listConns(listreq *pb.IPsecListConnsReq) (*pb.IPsecListConnsResp, error) {
 			}
 			log.Printf("Found message: %v", conn)
 
-			parsed_conn, err := parse_connection(&conn, k)
+			parsedConn, err := parseConnection(&conn, k)
 			if err != nil {
 				log.Printf("Failed parsing connection: %v", err)
 				return nil, err
 			}
-			conns_reply.Connection = append(conns_reply.Connection, parsed_conn)
+			connsReply.Connection = append(connsReply.Connection, parsedConn)
 		}
 	}
 
-	return &conns_reply, nil
+	return &connsReply, nil
 }
 
 func listCerts(listreq *pb.IPsecListCertsReq) (*pb.IPsecListCertsResp, error) {
-	listcerts_req := &list_certs{}
+	params := &listCertsParams{}
 
 	if listreq.GetType() != "" {
-		listcerts_req.Type = listreq.GetType()
+		params.Type = listreq.GetType()
 	}
 	if listreq.GetFlag() != "" {
-		listcerts_req.Flag = listreq.GetFlag()
+		params.Flag = listreq.GetFlag()
 	}
 	if listreq.GetSubject() != "" {
-		listcerts_req.Subject = listreq.GetSubject()
+		params.Subject = listreq.GetSubject()
 	}
 
 	s, err := vici.NewSession()
@@ -961,9 +1012,14 @@ func listCerts(listreq *pb.IPsecListCertsReq) (*pb.IPsecListCertsResp, error) {
 		log.Printf("Failed creating vici session")
 		return nil, err
 	}
-	defer s.Close()
+	defer func(conn *vici.Session) {
+		err := conn.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(s)
 
-	c, err := vici.MarshalMessage(listcerts_req)
+	c, err := vici.MarshalMessage(params)
 	if err != nil {
 		log.Printf("Failed marshalling message")
 		return nil, err
@@ -971,31 +1027,31 @@ func listCerts(listreq *pb.IPsecListCertsReq) (*pb.IPsecListCertsResp, error) {
 
 	log.Printf("Marshaled vici message: %v", c)
 
-	list_messages, err := s.StreamedCommandRequest("list-certs", "list-cert", c)
+	listMessages, err := s.StreamedCommandRequest("list-certs", "list-cert", c)
 	if err != nil {
 		log.Printf("Failed getting certs")
 		return nil, err
 	}
 
-	var certs_reply pb.IPsecListCertsResp
+	var certsReply pb.IPsecListCertsResp
 
 	// We stream responses, so build responses now
-	m := list_messages.Messages()
+	m := listMessages.Messages()
 	for _, mess := range m {
-		cert := list_cert{}
+		cert := listCertParams{}
 		err := vici.UnmarshalMessage(mess, &cert)
 		if err != nil {
 			log.Printf("Failed marshalling message: %v", err)
 			return nil, err
 		}
 
-		parsed_cert, err := parse_certificate(&cert)
+		parsedCert, err := parseCertificate(&cert)
 		if err != nil {
 			log.Printf("Failed parsing certificate: %v", err)
 			return nil, err
 		}
-		certs_reply.Certs = append(certs_reply.Certs, parsed_cert)
+		certsReply.Certs = append(certsReply.Certs, parsedCert)
 	}
 
-	return &certs_reply, nil
+	return &certsReply, nil
 }

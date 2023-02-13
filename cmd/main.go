@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) 2022 Intel Corporation, or its subsidiaries.
 
+// Package main is the main package of the application
 package main
 
 import (

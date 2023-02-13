@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) 2022 Intel Corporation, or its subsidiaries.
 
+// Package ipsec is the main package of the application
 package ipsec
 
 import (
@@ -10,10 +11,12 @@ import (
 	pb "github.com/opiproject/opi-api/security/v1/gen/go"
 )
 
+// Server represents the Server object
 type Server struct {
 	pb.UnimplementedIPsecServer
 }
 
+// IPsecVersion executes the ipsecVersion
 func (s *Server) IPsecVersion(ctx context.Context, in *pb.IPsecVersionReq) (*pb.IPsecVersionResp, error) {
 	ver, err := ipsecVersion()
 	if err != nil {
@@ -24,6 +27,7 @@ func (s *Server) IPsecVersion(ctx context.Context, in *pb.IPsecVersionReq) (*pb.
 	return ver, nil
 }
 
+// IPsecStats executes the ipsecStats
 func (s *Server) IPsecStats(ctx context.Context, in *pb.IPsecStatsReq) (*pb.IPsecStatsResp, error) {
 	stats, err := ipsecStats()
 	if err != nil {
@@ -34,6 +38,7 @@ func (s *Server) IPsecStats(ctx context.Context, in *pb.IPsecStatsReq) (*pb.IPse
 	return stats, nil
 }
 
+// IPsecInitiate executes the initiateConn
 func (s *Server) IPsecInitiate(ctx context.Context, in *pb.IPsecInitiateReq) (*pb.IPsecInitiateResp, error) {
 	log.Printf("IPsecInitiate: Received: %v", in)
 
@@ -43,11 +48,12 @@ func (s *Server) IPsecInitiate(ctx context.Context, in *pb.IPsecInitiateReq) (*p
 		return nil, err
 	}
 
-	ip_ret := pb.IPsecInitiateResp{}
+	ret := pb.IPsecInitiateResp{}
 
-	return &ip_ret, nil
+	return &ret, nil
 }
 
+// IPsecTerminate executes the terminateConn
 func (s *Server) IPsecTerminate(ctx context.Context, in *pb.IPsecTerminateReq) (*pb.IPsecTerminateResp, error) {
 	log.Printf("IPsecTerminate: Received: %v", in)
 
@@ -57,14 +63,15 @@ func (s *Server) IPsecTerminate(ctx context.Context, in *pb.IPsecTerminateReq) (
 		return nil, err
 	}
 
-	ip_ret := pb.IPsecTerminateResp{
+	ret := pb.IPsecTerminateResp{
 		Success: "Yes",
 		Matches: matches,
 	}
 
-	return &ip_ret, nil
+	return &ret, nil
 }
 
+// IPsecRekey executes the rekeyConn
 func (s *Server) IPsecRekey(ctx context.Context, in *pb.IPsecRekeyReq) (*pb.IPsecRekeyResp, error) {
 	log.Printf("IPsecRekey: Received: %v", in)
 
@@ -74,14 +81,15 @@ func (s *Server) IPsecRekey(ctx context.Context, in *pb.IPsecRekeyReq) (*pb.IPse
 		return nil, err
 	}
 
-	ip_ret := pb.IPsecRekeyResp{
+	ret := pb.IPsecRekeyResp{
 		Success: success,
 		Matches: matches,
 	}
 
-	return &ip_ret, nil
+	return &ret, nil
 }
 
+// IPsecListSas executes the listSas
 func (s *Server) IPsecListSas(ctx context.Context, in *pb.IPsecListSasReq) (*pb.IPsecListSasResp, error) {
 	log.Printf("IPsecListSas: Received %v", in)
 
@@ -94,6 +102,7 @@ func (s *Server) IPsecListSas(ctx context.Context, in *pb.IPsecListSasReq) (*pb.
 	return ret, nil
 }
 
+// IPsecListConns executes the listConns
 func (s *Server) IPsecListConns(ctx context.Context, in *pb.IPsecListConnsReq) (*pb.IPsecListConnsResp, error) {
 	log.Printf("IPsecListConns: Received: %v", in)
 
@@ -106,6 +115,7 @@ func (s *Server) IPsecListConns(ctx context.Context, in *pb.IPsecListConnsReq) (
 	return ret, nil
 }
 
+// IPsecListCerts executes the listCerts
 func (s *Server) IPsecListCerts(ctx context.Context, in *pb.IPsecListCertsReq) (*pb.IPsecListCertsResp, error) {
 	log.Printf("IPsecListCerts: Received: %v", in)
 
@@ -118,6 +128,7 @@ func (s *Server) IPsecListCerts(ctx context.Context, in *pb.IPsecListCertsReq) (
 	return ret, nil
 }
 
+// IPsecLoadConn executes the loadConn
 func (s *Server) IPsecLoadConn(ctx context.Context, in *pb.IPsecLoadConnReq) (*pb.IPsecLoadConnResp, error) {
 	log.Printf("IPsecLoadConn: Received: %v", in.GetConnection())
 
@@ -127,13 +138,14 @@ func (s *Server) IPsecLoadConn(ctx context.Context, in *pb.IPsecLoadConnReq) (*p
 		return nil, err
 	}
 
-	ip_ret := pb.IPsecLoadConnResp{
+	ret := pb.IPsecLoadConnResp{
 		Success: "Yes",
 	}
 
-	return &ip_ret, nil
+	return &ret, nil
 }
 
+// IPsecUnloadConn executes the unloadConn
 func (s *Server) IPsecUnloadConn(ctx context.Context, in *pb.IPsecUnloadConnReq) (*pb.IPsecUnloadConnResp, error) {
 	log.Printf("IPsecUnloadConn: Received: %v", in.GetName())
 
@@ -143,9 +155,9 @@ func (s *Server) IPsecUnloadConn(ctx context.Context, in *pb.IPsecUnloadConnReq)
 		return nil, err
 	}
 
-	ip_ret := pb.IPsecUnloadConnResp{
+	ret := pb.IPsecUnloadConnResp{
 		Success: "Yes",
 	}
 
-	return &ip_ret, nil
+	return &ret, nil
 }
