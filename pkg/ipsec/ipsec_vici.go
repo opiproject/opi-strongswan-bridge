@@ -350,6 +350,7 @@ func ipsecVersion() (*pb.IPsecVersionResp, error) {
 	return verresp, err
 }
 
+//nolint:funlen
 func ipsecStats() (*pb.IPsecStatsResp, error) {
 	s, err := vici.NewSession()
 	if err != nil {
@@ -480,6 +481,7 @@ func ipsecStats() (*pb.IPsecStatsResp, error) {
 	return statsresp, nil
 }
 
+//nolint:funlen,gocognit,gocyclo
 func loadConn(connreq *pb.IPsecLoadConnReq) error {
 	// Declare the connection variable, as we have to conditionally load it
 	var conn = &connectionParams{
