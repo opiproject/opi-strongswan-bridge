@@ -910,8 +910,7 @@ func listSas(listreq *pb.IPsecListSasReq) (*pb.IPsecListSasResp, error) {
 	var sasReply pb.IPsecListSasResp
 
 	// We stream responses, so build responses now
-	m := listMessages.Messages()
-	for _, mess := range m {
+	for _, mess := range listMessages {
 		for _, k := range mess.Keys() {
 			listSas := listIkeSaParams{}
 			log.Printf("K IS EQUAL TO %v", k)
@@ -971,8 +970,7 @@ func listConns(listreq *pb.IPsecListConnsReq) (*pb.IPsecListConnsResp, error) {
 	var connsReply pb.IPsecListConnsResp
 
 	// We stream responses, so build responses now
-	m := listMessages.Messages()
-	for _, mess := range m {
+	for _, mess := range listMessages {
 		for _, k := range mess.Keys() {
 			conn := listIkeParams{}
 			log.Printf("K IS EQUAL TO %v", k)
@@ -1038,8 +1036,7 @@ func listCerts(listreq *pb.IPsecListCertsReq) (*pb.IPsecListCertsResp, error) {
 	var certsReply pb.IPsecListCertsResp
 
 	// We stream responses, so build responses now
-	m := listMessages.Messages()
-	for _, mess := range m {
+	for _, mess := range listMessages {
 		cert := listCertParams{}
 		err := vici.UnmarshalMessage(mess, &cert)
 		if err != nil {
