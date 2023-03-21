@@ -17,7 +17,7 @@ type Server struct {
 }
 
 // IPsecVersion executes the ipsecVersion
-func (s *Server) IPsecVersion(ctx context.Context, in *pb.IPsecVersionReq) (*pb.IPsecVersionResp, error) {
+func (s *Server) IPsecVersion(_ context.Context, _ *pb.IPsecVersionReq) (*pb.IPsecVersionResp, error) {
 	ver, err := ipsecVersion()
 	if err != nil {
 		log.Printf("IPsecVersion: Failed %v", err)
@@ -28,7 +28,7 @@ func (s *Server) IPsecVersion(ctx context.Context, in *pb.IPsecVersionReq) (*pb.
 }
 
 // IPsecStats executes the ipsecStats
-func (s *Server) IPsecStats(ctx context.Context, in *pb.IPsecStatsReq) (*pb.IPsecStatsResp, error) {
+func (s *Server) IPsecStats(_ context.Context, _ *pb.IPsecStatsReq) (*pb.IPsecStatsResp, error) {
 	stats, err := ipsecStats()
 	if err != nil {
 		log.Printf("IPsecStats: Failed %v", err)
@@ -39,7 +39,7 @@ func (s *Server) IPsecStats(ctx context.Context, in *pb.IPsecStatsReq) (*pb.IPse
 }
 
 // IPsecInitiate executes the initiateConn
-func (s *Server) IPsecInitiate(ctx context.Context, in *pb.IPsecInitiateReq) (*pb.IPsecInitiateResp, error) {
+func (s *Server) IPsecInitiate(_ context.Context, in *pb.IPsecInitiateReq) (*pb.IPsecInitiateResp, error) {
 	log.Printf("IPsecInitiate: Received: %v", in)
 
 	err := initiateConn(in)
@@ -54,7 +54,7 @@ func (s *Server) IPsecInitiate(ctx context.Context, in *pb.IPsecInitiateReq) (*p
 }
 
 // IPsecTerminate executes the terminateConn
-func (s *Server) IPsecTerminate(ctx context.Context, in *pb.IPsecTerminateReq) (*pb.IPsecTerminateResp, error) {
+func (s *Server) IPsecTerminate(_ context.Context, in *pb.IPsecTerminateReq) (*pb.IPsecTerminateResp, error) {
 	log.Printf("IPsecTerminate: Received: %v", in)
 
 	matches, err := terminateConn(in)
@@ -72,7 +72,7 @@ func (s *Server) IPsecTerminate(ctx context.Context, in *pb.IPsecTerminateReq) (
 }
 
 // IPsecRekey executes the rekeyConn
-func (s *Server) IPsecRekey(ctx context.Context, in *pb.IPsecRekeyReq) (*pb.IPsecRekeyResp, error) {
+func (s *Server) IPsecRekey(_ context.Context, in *pb.IPsecRekeyReq) (*pb.IPsecRekeyResp, error) {
 	log.Printf("IPsecRekey: Received: %v", in)
 
 	success, matches, err := rekeyConn(in)
@@ -90,7 +90,7 @@ func (s *Server) IPsecRekey(ctx context.Context, in *pb.IPsecRekeyReq) (*pb.IPse
 }
 
 // IPsecListSas executes the listSas
-func (s *Server) IPsecListSas(ctx context.Context, in *pb.IPsecListSasReq) (*pb.IPsecListSasResp, error) {
+func (s *Server) IPsecListSas(_ context.Context, in *pb.IPsecListSasReq) (*pb.IPsecListSasResp, error) {
 	log.Printf("IPsecListSas: Received %v", in)
 
 	ret, err := listSas(in)
@@ -103,7 +103,7 @@ func (s *Server) IPsecListSas(ctx context.Context, in *pb.IPsecListSasReq) (*pb.
 }
 
 // IPsecListConns executes the listConns
-func (s *Server) IPsecListConns(ctx context.Context, in *pb.IPsecListConnsReq) (*pb.IPsecListConnsResp, error) {
+func (s *Server) IPsecListConns(_ context.Context, in *pb.IPsecListConnsReq) (*pb.IPsecListConnsResp, error) {
 	log.Printf("IPsecListConns: Received: %v", in)
 
 	ret, err := listConns(in)
@@ -116,7 +116,7 @@ func (s *Server) IPsecListConns(ctx context.Context, in *pb.IPsecListConnsReq) (
 }
 
 // IPsecListCerts executes the listCerts
-func (s *Server) IPsecListCerts(ctx context.Context, in *pb.IPsecListCertsReq) (*pb.IPsecListCertsResp, error) {
+func (s *Server) IPsecListCerts(_ context.Context, in *pb.IPsecListCertsReq) (*pb.IPsecListCertsResp, error) {
 	log.Printf("IPsecListCerts: Received: %v", in)
 
 	ret, err := listCerts(in)
@@ -129,7 +129,7 @@ func (s *Server) IPsecListCerts(ctx context.Context, in *pb.IPsecListCertsReq) (
 }
 
 // IPsecLoadConn executes the loadConn
-func (s *Server) IPsecLoadConn(ctx context.Context, in *pb.IPsecLoadConnReq) (*pb.IPsecLoadConnResp, error) {
+func (s *Server) IPsecLoadConn(_ context.Context, in *pb.IPsecLoadConnReq) (*pb.IPsecLoadConnResp, error) {
 	log.Printf("IPsecLoadConn: Received: %v", in.GetConnection())
 
 	err := loadConn(in)
@@ -146,7 +146,7 @@ func (s *Server) IPsecLoadConn(ctx context.Context, in *pb.IPsecLoadConnReq) (*p
 }
 
 // IPsecUnloadConn executes the unloadConn
-func (s *Server) IPsecUnloadConn(ctx context.Context, in *pb.IPsecUnloadConnReq) (*pb.IPsecUnloadConnResp, error) {
+func (s *Server) IPsecUnloadConn(_ context.Context, in *pb.IPsecUnloadConnReq) (*pb.IPsecUnloadConnResp, error) {
 	log.Printf("IPsecUnloadConn: Received: %v", in.GetName())
 
 	err := unloadConn(in)
