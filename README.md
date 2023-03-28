@@ -9,6 +9,8 @@
 [![Go Doc](https://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/opiproject/opi-strongswan-bridge)
 [![Pulls](https://img.shields.io/docker/pulls/opiproject/opi-strongswan-bridge.svg?logo=docker&style=flat&label=Pulls)](https://hub.docker.com/r/opiproject/opi-strongswan-bridge)
 [![Last Release](https://img.shields.io/github/v/release/opiproject/opi-strongswan-bridge?label=Latest&style=flat-square&logo=go)](https://github.com/opiproject/opi-strongswan-bridge/releases)
+[![GitHub stars](https://img.shields.io/github/stars/opiproject/opi-strongswan-bridge.svg?style=flat-square&label=github%20stars)](https://github.com/opiproject/opi-strongswan-bridge)
+[![GitHub Contributors](https://img.shields.io/github/contributors/opiproject/opi-strongswan-bridge.svg?style=flat-square)](https://github.com/opiproject/opi-strongswan-bridge/graphs/contributors)
 
 This directory contains the security PoC for OPI. This includes reference code
 for the [IPsec](https://github.com/opiproject/opi-api/blob/main/security/v1/ipsec.proto)
