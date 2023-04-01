@@ -3,7 +3,7 @@ module github.com/opiproject/opi-strongswan-bridge
 go 1.19
 
 require (
-	github.com/opiproject/opi-api v0.0.0-20230324143335-625e66a59b8a
+	github.com/opiproject/opi-api v0.0.0-20230330192808-3ba8d58f5c82
 	github.com/strongswan/govici v0.7.0
 	google.golang.org/grpc v1.54.0
 )
