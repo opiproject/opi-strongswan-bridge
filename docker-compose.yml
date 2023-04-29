@@ -57,7 +57,7 @@ services:
       test: grpcurl -plaintext localhost:50151 list || exit 1
 
   opi-test:
-    image: ghcr.io/opiproject/godpu:main@sha256:66dd919dc209deb9eca2d649b0490640b1cafd4859c647e806edefe9d7230fbb
+    image: ghcr.io/opiproject/godpu:main@sha256:050628bbe5d1d14b164fcd810092e5b198993faa1cb08b03533e6893ff8a2e96
     network_mode: service:vpn-server
     depends_on:
       opi-security-server:
