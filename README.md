@@ -1,6 +1,7 @@
 # OPI to strongSwan bridge using vici API
 
 [![Linters](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/linters.yml/badge.svg)](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/linters.yml)
+[![CodeQL](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/codeql.yml/badge.svg)](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/codeql.yml)
 [![tests](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/go.yml/badge.svg)](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/go.yml)
 [![Docker](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/opiproject/opi-strongswan-bridge/actions/workflows/docker-publish.yml)
 [![License](https://img.shields.io/github/license/opiproject/opi-strongswan-bridge?style=flat-square&color=blue&label=License)](https://github.com/opiproject/opi-strongswan-bridge/blob/master/LICENSE)
