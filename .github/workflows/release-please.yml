@@ -1,0 +1,9 @@
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+jobs:
+  call:
+    uses: ./.github/workflows/release-please.yml
+    secrets: inherit
