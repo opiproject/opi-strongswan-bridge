@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/opiproject/opi-api v0.0.0-20230908135156-02d38276b0f2
 	github.com/strongswan/govici v0.7.0
-	google.golang.org/grpc v1.58.0
+	google.golang.org/grpc v1.58.1
 )
 
 require (
