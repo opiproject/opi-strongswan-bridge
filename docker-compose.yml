@@ -47,6 +47,7 @@ services:
       context: .
     depends_on:
       - vpn-client
+      - redis
     volumes_from:
       - vpn-client:rw
     networks:
@@ -55,6 +56,14 @@ services:
     command: /opi-vici-bridge -port=50151
     healthcheck:
       test: grpcurl -plaintext localhost:50151 list || exit 1
+
+  redis:
+    image: redis:7.2.1-alpine3.18
+    networks:
+      - internet
+      - intranet
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
 
   opi-test:
     image: ghcr.io/opiproject/godpu:main@sha256:59d56d2f2bfe500b102ca197d0a87c897f05a565bed9de0f827f4f1ff71999f7
