@@ -416,15 +416,15 @@ func parseCertificate(cert *listCertParams) (*pb.ListCert, error) {
 		s1 := strings.ToUpper(cert.Type)
 		switch {
 		case strings.Contains(s1, "X509_AC"):
-			ret.Type = pb.CertificateType_CERT_X509
+			ret.Type = pb.CertificateType_CERTIFICATE_TYPE_X509_AC
 		case strings.Contains(s1, "X509_CRL"):
-			ret.Type = pb.CertificateType_CERT_X509_CRL
+			ret.Type = pb.CertificateType_CERTIFICATE_TYPE_X509_CRL
 		case strings.Contains(s1, "X509"):
-			ret.Type = pb.CertificateType_CERT_X509
+			ret.Type = pb.CertificateType_CERTIFICATE_TYPE_X509_UNSPECIFIED
 		case strings.Contains(s1, "OCSP_RESPONSE"):
-			ret.Type = pb.CertificateType_CERT_OCSP_RESPONSE
+			ret.Type = pb.CertificateType_CERTIFICATE_TYPE_OCSP_RESPONSE
 		case strings.Contains(s1, "PUBKEY"):
-			ret.Type = pb.CertificateType_CERT_PUBKEY
+			ret.Type = pb.CertificateType_CERTIFICATE_TYPE_PUBKEY
 		default:
 			return nil, errors.New("unknown cert type")
 		}
@@ -433,13 +433,13 @@ func parseCertificate(cert *listCertParams) (*pb.ListCert, error) {
 		s1 := strings.ToUpper(cert.Flag)
 		switch {
 		case strings.Contains(s1, "OCSP"):
-			ret.Flag = pb.X509CertificateFlag_X509_CERT_FLAG_OCSP
+			ret.Flag = pb.X509CertificateFlag_X509_CERTIFICATE_FLAG_OCSP
 		case strings.Contains(s1, "AA"):
-			ret.Flag = pb.X509CertificateFlag_X509_CERT_FLAG_AA
+			ret.Flag = pb.X509CertificateFlag_X509_CERTIFICATE_FLAG_AA
 		case strings.Contains(s1, "CA"):
-			ret.Flag = pb.X509CertificateFlag_X509_CERT_FLAG_CA
+			ret.Flag = pb.X509CertificateFlag_X509_CERTIFICATE_FLAG_CA
 		case strings.Contains(s1, "NONE"):
-			ret.Flag = pb.X509CertificateFlag_X509_CERT_FLAG_NONE
+			ret.Flag = pb.X509CertificateFlag_X509_CERTIFICATE_FLAG_UNSPECIFIED
 		default:
 			return nil, errors.New("unknown cert flag")
 		}

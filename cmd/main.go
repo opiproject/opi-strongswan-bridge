@@ -29,7 +29,7 @@ func main() {
 	}
 	s := grpc.NewServer()
 
-	pb.RegisterIPsecServer(s, &server.Server{})
+	pb.RegisterIPsecServiceServer(s, &server.Server{})
 
 	reflection.Register(s)
 

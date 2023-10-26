@@ -313,7 +313,7 @@ func buildProposal(prop *pb.Proposals) (string, error) {
 	return result.String(), nil
 }
 
-func ipsecVersion() (*pb.IPsecVersionResp, error) {
+func ipsecVersion() (*pb.IPsecVersionResponse, error) {
 	s, err := vici.NewSession()
 	if err != nil {
 		log.Printf("Failed creating vici session")
@@ -339,7 +339,7 @@ func ipsecVersion() (*pb.IPsecVersionResp, error) {
 	machine := m.Get("machine").(string)
 
 	// Assemble return value
-	verresp := &pb.IPsecVersionResp{
+	verresp := &pb.IPsecVersionResponse{
 		Daemon:  daemon,
 		Version: version,
 		Sysname: sysname,
@@ -351,7 +351,7 @@ func ipsecVersion() (*pb.IPsecVersionResp, error) {
 }
 
 //nolint:funlen
-func ipsecStats() (*pb.IPsecStatsResp, error) {
+func ipsecStats() (*pb.IPsecStatsResponse, error) {
 	s, err := vici.NewSession()
 	if err != nil {
 		log.Printf("Failed creating vici session")
@@ -474,7 +474,7 @@ func ipsecStats() (*pb.IPsecStatsResp, error) {
 		result.WriteString("Available but unsued bytes: " + free + "\n")
 	}
 
-	statsresp := &pb.IPsecStatsResp{
+	statsresp := &pb.IPsecStatsResponse{
 		Status: result.String(),
 	}
 
@@ -482,7 +482,7 @@ func ipsecStats() (*pb.IPsecStatsResp, error) {
 }
 
 //nolint:funlen,gocognit,gocyclo
-func loadConn(connreq *pb.IPsecLoadConnReq) error {
+func loadConn(connreq *pb.IPsecLoadConnRequest) error {
 	// Declare the connection variable, as we have to conditionally load it
 	var conn = &connectionParams{
 		LocalPort:  500,
@@ -670,7 +670,7 @@ func loadConn(connreq *pb.IPsecLoadConnReq) error {
 	return err
 }
 
-func unloadConn(connreq *pb.IPsecUnloadConnReq) error {
+func unloadConn(connreq *pb.IPsecUnloadConnRequest) error {
 	// Build the connection object
 	conn := &unloadConnectionParams{
 		Name: connreq.GetName(),
@@ -705,7 +705,7 @@ func unloadConn(connreq *pb.IPsecUnloadConnReq) error {
 	return err
 }
 
-func initiateConn(initreq *pb.IPsecInitiateReq) error {
+func initiateConn(initreq *pb.IPsecInitiateRequest) error {
 	params := &initConnectionParams{}
 
 	if initreq.GetChild() != "" {
@@ -751,7 +751,7 @@ func initiateConn(initreq *pb.IPsecInitiateReq) error {
 	return err
 }
 
-func terminateConn(termreq *pb.IPsecTerminateReq) (uint32, error) {
+func terminateConn(termreq *pb.IPsecTerminateRequest) (uint32, error) {
 	params := &terminateConnectionParams{}
 
 	if termreq.GetChild() != "" {
@@ -806,7 +806,7 @@ func terminateConn(termreq *pb.IPsecTerminateReq) (uint32, error) {
 	return 1, err
 }
 
-func rekeyConn(rekeyreq *pb.IPsecRekeyReq) (string, uint32, error) {
+func rekeyConn(rekeyreq *pb.IPsecRekeyRequest) (string, uint32, error) {
 	params := &rekeyConnectionParams{}
 
 	if rekeyreq.GetChild() != "" {
@@ -862,7 +862,7 @@ func rekeyConn(rekeyreq *pb.IPsecRekeyReq) (string, uint32, error) {
 	return success, uint32(matches), nil
 }
 
-func listSas(listreq *pb.IPsecListSasReq) (*pb.IPsecListSasResp, error) {
+func listSas(listreq *pb.IPsecListSasRequest) (*pb.IPsecListSasResponse, error) {
 	params := &listSasParams{}
 
 	if listreq.GetChild() != "" {
@@ -907,7 +907,7 @@ func listSas(listreq *pb.IPsecListSasReq) (*pb.IPsecListSasResp, error) {
 		return nil, err
 	}
 
-	var sasReply pb.IPsecListSasResp
+	var sasReply pb.IPsecListSasResponse
 
 	// We stream responses, so build responses now
 	for _, mess := range listMessages {
@@ -934,7 +934,7 @@ func listSas(listreq *pb.IPsecListSasReq) (*pb.IPsecListSasResp, error) {
 	return &sasReply, nil
 }
 
-func listConns(listreq *pb.IPsecListConnsReq) (*pb.IPsecListConnsResp, error) {
+func listConns(listreq *pb.IPsecListConnsRequest) (*pb.IPsecListConnsResponse, error) {
 	params := &listConnsParams{}
 
 	if listreq.GetIke() != "" {
@@ -967,7 +967,7 @@ func listConns(listreq *pb.IPsecListConnsReq) (*pb.IPsecListConnsResp, error) {
 		return nil, err
 	}
 
-	var connsReply pb.IPsecListConnsResp
+	var connsReply pb.IPsecListConnsResponse
 
 	// We stream responses, so build responses now
 	for _, mess := range listMessages {
@@ -994,7 +994,7 @@ func listConns(listreq *pb.IPsecListConnsReq) (*pb.IPsecListConnsResp, error) {
 	return &connsReply, nil
 }
 
-func listCerts(listreq *pb.IPsecListCertsReq) (*pb.IPsecListCertsResp, error) {
+func listCerts(listreq *pb.IPsecListCertsRequest) (*pb.IPsecListCertsResponse, error) {
 	params := &listCertsParams{}
 
 	if listreq.GetType() != "" {
@@ -1033,7 +1033,7 @@ func listCerts(listreq *pb.IPsecListCertsReq) (*pb.IPsecListCertsResp, error) {
 		return nil, err
 	}
 
-	var certsReply pb.IPsecListCertsResp
+	var certsReply pb.IPsecListCertsResponse
 
 	// We stream responses, so build responses now
 	for _, mess := range listMessages {
