@@ -134,16 +134,16 @@ $ grpc_cli ls opi-security-server:50051 opi_api.security.v1.IPsec -l
 filename: ipsec.proto
 package: opi_api.security.v1;
 service IPsec {
-  rpc IPsecVersion(opi_api.security.v1.IPsecVersionReq) returns (opi_api.security.v1.IPsecVersionResp) {}
-  rpc IPsecStats(opi_api.security.v1.IPsecStatsReq) returns (opi_api.security.v1.IPsecStatsResp) {}
-  rpc IPsecInitiate(opi_api.security.v1.IPsecInitiateReq) returns (opi_api.security.v1.IPsecInitiateResp) {}
-  rpc IPsecTerminate(opi_api.security.v1.IPsecTerminateReq) returns (opi_api.security.v1.IPsecTerminateResp) {}
-  rpc IPsecRekey(opi_api.security.v1.IPsecRekeyReq) returns (opi_api.security.v1.IPsecRekeyResp) {}
-  rpc IPsecListSas(opi_api.security.v1.IPsecListSasReq) returns (opi_api.security.v1.IPsecListSasResp) {}
-  rpc IPsecListConns(opi_api.security.v1.IPsecListConnsReq) returns (opi_api.security.v1.IPsecListConnsResp) {}
-  rpc IPsecListCerts(opi_api.security.v1.IPsecListCertsReq) returns (opi_api.security.v1.IPsecListCertsResp) {}
-  rpc IPsecLoadConn(opi_api.security.v1.IPsecLoadConnReq) returns (opi_api.security.v1.IPsecLoadConnResp) {}
-  rpc IPsecUnloadConn(opi_api.security.v1.IPsecUnloadConnReq) returns (opi_api.security.v1.IPsecUnloadConnResp) {}
+  rpc IPsecVersion(opi_api.security.v1.IPsecVersionRequest) returns (opi_api.security.v1.IPsecVersionResponse) {}
+  rpc IPsecStats(opi_api.security.v1.IPsecStatsRequest) returns (opi_api.security.v1.IPsecStatsResponse) {}
+  rpc IPsecInitiate(opi_api.security.v1.IPsecInitiateRequest) returns (opi_api.security.v1.IPsecInitiateResponse) {}
+  rpc IPsecTerminate(opi_api.security.v1.IPsecTerminateRequest) returns (opi_api.security.v1.IPsecTerminateResponse) {}
+  rpc IPsecRekey(opi_api.security.v1.IPsecRekeyRequest) returns (opi_api.security.v1.IPsecRekeyResponse) {}
+  rpc IPsecListSas(opi_api.security.v1.IPsecListSasRequest) returns (opi_api.security.v1.IPsecListSasResponse) {}
+  rpc IPsecListConns(opi_api.security.v1.IPsecListConnsRequest) returns (opi_api.security.v1.IPsecListConnsResponse) {}
+  rpc IPsecListCerts(opi_api.security.v1.IPsecListCertsRequest) returns (opi_api.security.v1.IPsecListCertsResponse) {}
+  rpc IPsecLoadConn(opi_api.security.v1.IPsecLoadConnRequest) returns (opi_api.security.v1.IPsecLoadConnResponse) {}
+  rpc IPsecUnloadConn(opi_api.security.v1.IPsecUnloadConnRequest) returns (opi_api.security.v1.IPsecUnloadConnResponse) {}
 }
 ```
 
@@ -151,7 +151,7 @@ See methods
 
 ```bash
 $ grpc_cli ls opi-security-server:50151 opi_api.security.v1.IPsec.IPsecLoadConn -l
-  rpc IPsecLoadConn(opi_api.security.v1.IPsecLoadConnReq) returns (opi_api.security.v1.IPsecLoadConnResp) {}
+  rpc IPsecLoadConn(opi_api.security.v1.IPsecLoadConnRequest) returns (opi_api.security.v1.IPsecLoadConnResponse) {}
 ```
 
 See messages

@@ -13,11 +13,11 @@ import (
 
 // Server represents the Server object
 type Server struct {
-	pb.UnimplementedIPsecServer
+	pb.UnimplementedIPsecServiceServer
 }
 
 // IPsecVersion executes the ipsecVersion
-func (s *Server) IPsecVersion(_ context.Context, _ *pb.IPsecVersionReq) (*pb.IPsecVersionResp, error) {
+func (s *Server) IPsecVersion(_ context.Context, _ *pb.IPsecVersionRequest) (*pb.IPsecVersionResponse, error) {
 	ver, err := ipsecVersion()
 	if err != nil {
 		log.Printf("IPsecVersion: Failed %v", err)
@@ -28,7 +28,7 @@ func (s *Server) IPsecVersion(_ context.Context, _ *pb.IPsecVersionReq) (*pb.IPs
 }
 
 // IPsecStats executes the ipsecStats
-func (s *Server) IPsecStats(_ context.Context, _ *pb.IPsecStatsReq) (*pb.IPsecStatsResp, error) {
+func (s *Server) IPsecStats(_ context.Context, _ *pb.IPsecStatsRequest) (*pb.IPsecStatsResponse, error) {
 	stats, err := ipsecStats()
 	if err != nil {
 		log.Printf("IPsecStats: Failed %v", err)
@@ -39,7 +39,7 @@ func (s *Server) IPsecStats(_ context.Context, _ *pb.IPsecStatsReq) (*pb.IPsecSt
 }
 
 // IPsecInitiate executes the initiateConn
-func (s *Server) IPsecInitiate(_ context.Context, in *pb.IPsecInitiateReq) (*pb.IPsecInitiateResp, error) {
+func (s *Server) IPsecInitiate(_ context.Context, in *pb.IPsecInitiateRequest) (*pb.IPsecInitiateResponse, error) {
 	log.Printf("IPsecInitiate: Received: %v", in)
 
 	err := initiateConn(in)
@@ -48,13 +48,13 @@ func (s *Server) IPsecInitiate(_ context.Context, in *pb.IPsecInitiateReq) (*pb.
 		return nil, err
 	}
 
-	ret := pb.IPsecInitiateResp{}
+	ret := pb.IPsecInitiateResponse{}
 
 	return &ret, nil
 }
 
 // IPsecTerminate executes the terminateConn
-func (s *Server) IPsecTerminate(_ context.Context, in *pb.IPsecTerminateReq) (*pb.IPsecTerminateResp, error) {
+func (s *Server) IPsecTerminate(_ context.Context, in *pb.IPsecTerminateRequest) (*pb.IPsecTerminateResponse, error) {
 	log.Printf("IPsecTerminate: Received: %v", in)
 
 	matches, err := terminateConn(in)
@@ -63,7 +63,7 @@ func (s *Server) IPsecTerminate(_ context.Context, in *pb.IPsecTerminateReq) (*p
 		return nil, err
 	}
 
-	ret := pb.IPsecTerminateResp{
+	ret := pb.IPsecTerminateResponse{
 		Success: "Yes",
 		Matches: matches,
 	}
@@ -72,7 +72,7 @@ func (s *Server) IPsecTerminate(_ context.Context, in *pb.IPsecTerminateReq) (*p
 }
 
 // IPsecRekey executes the rekeyConn
-func (s *Server) IPsecRekey(_ context.Context, in *pb.IPsecRekeyReq) (*pb.IPsecRekeyResp, error) {
+func (s *Server) IPsecRekey(_ context.Context, in *pb.IPsecRekeyRequest) (*pb.IPsecRekeyResponse, error) {
 	log.Printf("IPsecRekey: Received: %v", in)
 
 	success, matches, err := rekeyConn(in)
@@ -81,7 +81,7 @@ func (s *Server) IPsecRekey(_ context.Context, in *pb.IPsecRekeyReq) (*pb.IPsecR
 		return nil, err
 	}
 
-	ret := pb.IPsecRekeyResp{
+	ret := pb.IPsecRekeyResponse{
 		Success: success,
 		Matches: matches,
 	}
@@ -90,7 +90,7 @@ func (s *Server) IPsecRekey(_ context.Context, in *pb.IPsecRekeyReq) (*pb.IPsecR
 }
 
 // IPsecListSas executes the listSas
-func (s *Server) IPsecListSas(_ context.Context, in *pb.IPsecListSasReq) (*pb.IPsecListSasResp, error) {
+func (s *Server) IPsecListSas(_ context.Context, in *pb.IPsecListSasRequest) (*pb.IPsecListSasResponse, error) {
 	log.Printf("IPsecListSas: Received %v", in)
 
 	ret, err := listSas(in)
@@ -103,7 +103,7 @@ func (s *Server) IPsecListSas(_ context.Context, in *pb.IPsecListSasReq) (*pb.IP
 }
 
 // IPsecListConns executes the listConns
-func (s *Server) IPsecListConns(_ context.Context, in *pb.IPsecListConnsReq) (*pb.IPsecListConnsResp, error) {
+func (s *Server) IPsecListConns(_ context.Context, in *pb.IPsecListConnsRequest) (*pb.IPsecListConnsResponse, error) {
 	log.Printf("IPsecListConns: Received: %v", in)
 
 	ret, err := listConns(in)
@@ -116,7 +116,7 @@ func (s *Server) IPsecListConns(_ context.Context, in *pb.IPsecListConnsReq) (*p
 }
 
 // IPsecListCerts executes the listCerts
-func (s *Server) IPsecListCerts(_ context.Context, in *pb.IPsecListCertsReq) (*pb.IPsecListCertsResp, error) {
+func (s *Server) IPsecListCerts(_ context.Context, in *pb.IPsecListCertsRequest) (*pb.IPsecListCertsResponse, error) {
 	log.Printf("IPsecListCerts: Received: %v", in)
 
 	ret, err := listCerts(in)
@@ -129,7 +129,7 @@ func (s *Server) IPsecListCerts(_ context.Context, in *pb.IPsecListCertsReq) (*p
 }
 
 // IPsecLoadConn executes the loadConn
-func (s *Server) IPsecLoadConn(_ context.Context, in *pb.IPsecLoadConnReq) (*pb.IPsecLoadConnResp, error) {
+func (s *Server) IPsecLoadConn(_ context.Context, in *pb.IPsecLoadConnRequest) (*pb.IPsecLoadConnResponse, error) {
 	log.Printf("IPsecLoadConn: Received: %v", in.GetConnection())
 
 	err := loadConn(in)
@@ -138,7 +138,7 @@ func (s *Server) IPsecLoadConn(_ context.Context, in *pb.IPsecLoadConnReq) (*pb.
 		return nil, err
 	}
 
-	ret := pb.IPsecLoadConnResp{
+	ret := pb.IPsecLoadConnResponse{
 		Success: "Yes",
 	}
 
@@ -146,7 +146,7 @@ func (s *Server) IPsecLoadConn(_ context.Context, in *pb.IPsecLoadConnReq) (*pb.
 }
 
 // IPsecUnloadConn executes the unloadConn
-func (s *Server) IPsecUnloadConn(_ context.Context, in *pb.IPsecUnloadConnReq) (*pb.IPsecUnloadConnResp, error) {
+func (s *Server) IPsecUnloadConn(_ context.Context, in *pb.IPsecUnloadConnRequest) (*pb.IPsecUnloadConnResponse, error) {
 	log.Printf("IPsecUnloadConn: Received: %v", in.GetName())
 
 	err := unloadConn(in)
@@ -155,7 +155,7 @@ func (s *Server) IPsecUnloadConn(_ context.Context, in *pb.IPsecUnloadConnReq) (
 		return nil, err
 	}
 
-	ret := pb.IPsecUnloadConnResp{
+	ret := pb.IPsecUnloadConnResponse{
 		Success: "Yes",
 	}
 
