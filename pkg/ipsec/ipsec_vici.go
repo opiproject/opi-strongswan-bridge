@@ -257,21 +257,21 @@ func buildProposal(prop *pb.Proposals) (string, error) {
 	}
 
 	for k := 0; k < len(prop.CryptoAlg); k++ {
-		crypto.WriteString(strings.ToLower(prop.CryptoAlg[k].String()))
+		crypto.WriteString(strings.TrimPrefix(strings.ToLower(prop.CryptoAlg[k].String()), "crypto_algorithm_"))
 		if (k + 1) < len(prop.CryptoAlg) {
 			tstr = "-"
 			crypto.WriteString(tstr)
 		}
 	}
 	for k := 0; k < len(prop.IntegAlg); k++ {
-		integ.WriteString(strings.ToLower(prop.IntegAlg[k].String()))
+		integ.WriteString(strings.TrimPrefix(strings.ToLower(prop.IntegAlg[k].String()), "integ_algorithm_"))
 		if (k + 1) < len(prop.IntegAlg) {
 			tstr = "-"
 			integ.WriteString(tstr)
 		}
 	}
 	for k := 0; k < len(prop.Prf); k++ {
-		prf.WriteString(strings.ToLower(prop.Prf[k].String()))
+		prf.WriteString(strings.TrimPrefix(strings.ToLower(prop.Prf[k].String()), "pr_function_"))
 		if (k + 1) < len(prop.Prf) {
 			tstr = "-"
 			prf.WriteString(tstr)
@@ -532,7 +532,7 @@ func loadConn(connreq *pb.IPsecLoadConnRequest) error {
 	}
 	if c.GetLocalAuth() != nil {
 		conn.Local = localOptsParams{
-			Auth: strings.ToLower(c.GetLocalAuth().GetAuth().String()),
+			Auth: strings.TrimPrefix(strings.ToLower(c.GetLocalAuth().GetAuth().String()), "auth_type_"),
 			ID:   c.GetLocalAuth().GetId(),
 		}
 
@@ -540,7 +540,7 @@ func loadConn(connreq *pb.IPsecLoadConnRequest) error {
 	}
 	if c.GetRemoteAuth() != nil {
 		conn.Remote = remoteOptsParams{
-			Auth: strings.ToLower(c.GetRemoteAuth().GetAuth().String()),
+			Auth: strings.TrimPrefix(strings.ToLower(c.GetRemoteAuth().GetAuth().String()), "auth_type_"),
 			ID:   c.GetRemoteAuth().GetId(),
 		}
 
