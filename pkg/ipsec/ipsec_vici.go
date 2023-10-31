@@ -278,7 +278,7 @@ func buildProposal(prop *pb.Proposals) (string, error) {
 		}
 	}
 	for k := 0; k < len(prop.Dhgroups); k++ {
-		dh.WriteString(strings.ToLower(prop.Dhgroups[k].String()))
+		dh.WriteString(strings.TrimPrefix(strings.ToLower(prop.Dhgroups[k].String()), "dh_groups_"))
 		if (k + 1) < len(prop.Dhgroups) {
 			tstr = "-"
 			dh.WriteString(tstr)
