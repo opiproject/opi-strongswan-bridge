@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/golangci/golangci-lint v1.55.2
 	github.com/onsi/ginkgo/v2 v2.13.0
-	github.com/opiproject/opi-api v0.0.0-20231120071940-7b62be4a63bd
+	github.com/opiproject/opi-api v0.0.0-20231204072820-45c57a6e9df1
 	github.com/strongswan/govici v0.7.0
 	github.com/vektra/mockery/v2 v2.38.0
 	golang.org/x/tools v0.16.0
