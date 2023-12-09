@@ -16,7 +16,7 @@ COPY pkg/ pkg/
 RUN go build -v -o /opi-vici-bridge /app/cmd/...
 
 # second stage to reduce image size
-FROM alpine:3.18
+FROM alpine:3.19
 COPY --from=builder /opi-vici-bridge /
 COPY --from=docker.io/fullstorydev/grpcurl:v1.8.9-alpine /bin/grpcurl /usr/local/bin/
 EXPOSE 50051
