@@ -9,7 +9,7 @@ require (
 	github.com/strongswan/govici v0.7.0
 	github.com/vektra/mockery/v2 v2.38.0
 	golang.org/x/tools v0.16.0
-	google.golang.org/grpc v1.59.0
+	google.golang.org/grpc v1.60.0
 )
 
 require (
