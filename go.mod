@@ -8,7 +8,7 @@ require (
 	github.com/opiproject/opi-api v0.0.0-20231218064307-7e6cf143fe10
 	github.com/strongswan/govici v0.7.0
 	github.com/vektra/mockery/v2 v2.38.0
-	golang.org/x/tools v0.16.0
+	golang.org/x/tools v0.16.1
 	google.golang.org/grpc v1.60.1
 )
 
