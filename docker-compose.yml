@@ -66,7 +66,7 @@ services:
       test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
 
   opi-test:
-    image: ghcr.io/opiproject/godpu:main@sha256:9b72299877b2310c8f46c591604f95b26fa81f7bbb4c99cd6d20942e54921378
+    image: ghcr.io/opiproject/godpu:main@sha256:708df2ca86cf289502ae507f9e75e8acdb9b7256579f5f12517593cbf8c623de
     network_mode: service:vpn-server
     depends_on:
       opi-security-server:
