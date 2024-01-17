@@ -1,13 +1,15 @@
 module github.com/opiproject/opi-strongswan-bridge
 
-go 1.19
+go 1.21
+
+toolchain go1.21.6
 
 require (
 	github.com/golangci/golangci-lint v1.55.2
 	github.com/onsi/ginkgo/v2 v2.14.0
 	github.com/opiproject/opi-api v0.0.0-20240115075233-7dc729079487
 	github.com/strongswan/govici v0.7.0
-	github.com/vektra/mockery/v2 v2.38.0
+	github.com/vektra/mockery/v2 v2.40.1
 	golang.org/x/tools v0.17.0
 	google.golang.org/grpc v1.60.1
 )
@@ -44,7 +46,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/charithe/durationcheck v0.0.10 // indirect
 	github.com/chavacava/garif v0.1.0 // indirect
-	github.com/chigopher/pathlib v0.15.0 // indirect
+	github.com/chigopher/pathlib v0.19.1 // indirect
 	github.com/curioswitch/go-reassign v0.2.0 // indirect
 	github.com/daixiang0/gci v0.11.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
