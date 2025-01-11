@@ -238,21 +238,25 @@ func parseAuth(conn listAuthParams, name string) (*pb.ListConnAuth, error) {
 		auth.XauthId = conn.XauthID
 	}
 	if conn.Groups != nil {
+		auth.Group = &pb.Groups{} // Initialize the Group struct
 		for k := 0; k < len(conn.Groups); k++ {
 			auth.Group.Group = append(auth.Group.Group, conn.Groups[k])
 		}
 	}
 	if conn.CertPolicy != nil {
+		auth.CertPolicy = &pb.CertPolicy{} // Initialize the CertPolicy struct
 		for k := 0; k < len(conn.CertPolicy); k++ {
 			auth.CertPolicy.CertPolicy = append(auth.CertPolicy.CertPolicy, conn.CertPolicy[k])
 		}
 	}
 	if conn.Certs != nil {
+		auth.Certs = &pb.Certs{} // Initialize the Certs struct
 		for k := 0; k < len(conn.Certs); k++ {
 			auth.Certs.Cert = append(auth.Certs.Cert, conn.Certs[k])
 		}
 	}
 	if conn.CaCerts != nil {
+		auth.Cacerts = &pb.CaCerts{} // Initialize the Cacerts struct
 		for k := 0; k < len(conn.CaCerts); k++ {
 			auth.Cacerts.Cacert = append(auth.Cacerts.Cacert, conn.CaCerts[k])
 		}
