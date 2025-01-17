@@ -1,0 +1,67 @@
+version: "3"
+
+services:
+  vpn-server:
+    image: strongx509/strongswan:latest
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+      - SYS_MODULE
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./server:/etc/swanctl
+      - ./strongswan.conf:/etc/strongswan.conf
+      - /var/run
+    networks:
+      internet:
+         ipv4_address: 192.168.0.2
+      intranet:
+         ipv4_address: 10.1.0.2
+    command: './charon' 
+
+  go-test:
+    image: golang
+    volumes:
+      - ../.:/app
+    depends_on:
+      - vpn-client  
+    volumes_from:
+      - vpn-client:rw
+    stdin_open: true
+    tty: true
+    networks:
+      - internet
+      - intranet
+    working_dir: /app
+    
+  vpn-client:
+    image: strongx509/strongswan:latest
+    depends_on:
+      - vpn-server
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+      - SYS_MODULE
+    stdin_open: true
+    tty: true    
+    volumes:
+      - ./client:/etc/swanctl
+      - ./strongswan.conf:/etc/strongswan.conf
+      - /var/run
+    networks:
+      internet:
+         ipv4_address: 192.168.0.3
+    command: './charon'
+
+networks:
+  internet:
+    ipam:
+      driver: default 
+      config:
+        - subnet: 192.168.0.0/24
+  intranet:
+     ipam:
+        driver: default
+        config:
+          - subnet: 10.1.0.0/16 

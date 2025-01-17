@@ -8,6 +8,52 @@ on:
     branches: [ "main" ]
 
 jobs:
-  call:
-    uses: opiproject/actions/.github/workflows/go.yml@main
-    secrets: inherit
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go-version: [ '1.21', '1.22' ]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ matrix.go-version }}
+
+    - name: Build
+      run: go build -v ./...
+      working-directory: cmd
+  
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build & Start containers
+        run: |
+          set -x
+          cd tests
+          docker compose up --build --force-recreate --detach        
+          docker exec -i tests-go-test-1 go test -race -coverprofile=coverage.out -covermode=atomic -v ./...
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+
+      - name: Logs
+        if: always()
+        run: docker compose logs
+     
+      - name: Stop containers
+        if: always()
+        run: docker compose down --volumes --remove-orphans      
